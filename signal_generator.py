@@ -5,21 +5,21 @@ import matplotlib.pyplot as plt
 
 def generate_signal():
     # Create a random signal
-    x = list(range(0, 2000, 1)) # TODO make range to be time related
+    x = np.linspace(0, 1, 2000)  # TODO make range to be time related
     y = np.random.random((len(x), 1)) + 3
-    z = np.sin(x) + 1 # TODO set 28Hz frequency
-    y[400] = 1
-    return y, z
+    z = np.sin(28 * x) + 1  # TODO set 28Hz frequency
+    y[400] = 1  # TODO set y = 1 at certain points according to z
+    return x, y, z
 
 
-def plot(signal, sine_wave):
+def plot(time, signal, sine_wave):
     # Plot the Signals
-    plt.plot(signal)
-    plt.plot(sine_wave)
+    plt.plot(time, signal)
+    plt.plot(time, sine_wave)
     plt.ylim((0, 5))
     plt.show()
 
 
 if __name__ == '__main__':
-    b, t = generate_signal()
-    plot(b, t)
+    t, b, n = generate_signal()
+    plot(t, b, n)
