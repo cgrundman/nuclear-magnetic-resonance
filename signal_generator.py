@@ -22,12 +22,16 @@ def generate_signal():
 
     return data_points, HF_signal, LF_signal
 
+# TODO split plotting of the signals into subplots
+# TODO Plot High Fruency setting
 def plot(time, signal, sine_wave):
     # Plot the Signals
     plt.plot(time, signal)
     plt.plot(time, sine_wave)
     plt.ylim((0, 5))
     plt.xlim((0, 0.1))
+    plt.xticks([])
+    plt.yticks([])
     plt.show()
 
 
