@@ -3,9 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
-# TODO input peak point from outside of function
 # TODO make double and triple peaks
-# TODO make more realistic peak
 def generate_signal(resonance_frq):
     # Create a random signal
     data_points = np.linspace(0, 0.1, 2000) # generate data points
@@ -15,8 +13,8 @@ def generate_signal(resonance_frq):
     # Conditionally set the y values
     HF_signal = np.random.rand(len(data_points)) + 3
     for n in range(len(data_points)):
-        if resonance_frq - .005 < LF_signal[n] < resonance_frq + .005:
-            HF_signal[n] = 1  # Set resonance
+        if resonance_frq - .1 < LF_signal[n] < resonance_frq + .1:
+            HF_signal[n] = random.random()/10 + 1 + 25*abs(resonance_frq-LF_signal[n])  # Set resonance
        
     return data_points, HF_signal, LF_signal
 
