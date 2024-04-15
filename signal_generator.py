@@ -6,7 +6,7 @@ import random
 # TODO input peak point from outside of function
 # TODO make double and triple peaks
 # TODO make more realistic peak
-def generate_signal():
+def generate_signal(resonance_frq):
     # Create a random signal
     data_points = np.linspace(0, 0.1, 2000) # generate data points
     
@@ -15,7 +15,7 @@ def generate_signal():
     # Conditionally set the y values
     HF_signal = np.random.rand(len(data_points)) + 3
     for n in range(len(data_points)):
-        if .595 < LF_signal[n] < .605:
+        if resonance_frq - .005 < LF_signal[n] < resonance_frq + .005:
             HF_signal[n] = 1  # Set resonance
        
     return data_points, HF_signal, LF_signal
@@ -34,7 +34,6 @@ def plot(time, signal, sine_wave, HF_setting):
     ax1.grid(color='dimgrey')
     ax1.set_xticklabels([])
     ax1.set_yticklabels([])
-    # ax1.set_grid(color='r', linestyle='-', linewidth=2)
     ax2.plot(time, sine_wave, color='deepskyblue')
     ax2.set_title("LF Signal")
     # ax2.set_ylim((0, 5))
@@ -46,7 +45,9 @@ def plot(time, signal, sine_wave, HF_setting):
 
 
 if __name__ == '__main__':
-    t, b, n = generate_signal()
+    resonance_frq = .6
+
+    t, b, n = generate_signal(resonance_frq)
 
     HF_setting = 18.5
     plot(t, b, n, HF_setting)
