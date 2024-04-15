@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
-# TODO make double and triple peaks
+
 def generate_signal(resonance_frq):
     # Create a random signal
     data_points = np.linspace(0, 0.1, 2000) # generate data points
@@ -13,12 +13,29 @@ def generate_signal(resonance_frq):
     # Conditionally set the y values
     HF_signal = np.random.rand(len(data_points)) + 3
     for n in range(len(data_points)):
-        if resonance_frq - .1 < LF_signal[n] < resonance_frq + .1:
-            HF_signal[n] = random.random()/10 + 1 + 25*abs(resonance_frq-LF_signal[n])  # Set resonance
-       
+        # Single Peak
+        # if resonance_frq - .1 < LF_signal[n] < resonance_frq + .1:
+        #     HF_signal[n] = random.random()/10 + 1 + 25*abs(resonance_frq-LF_signal[n])
+        # Double Peak
+        # resonance_high = resonance_frq + .25
+        # resonance_low = resonance_frq - .25
+        # if resonance_high - .1 < LF_signal[n] < resonance_high + .1:
+        #     HF_signal[n] = random.random()/10 + 2 + 5*abs((resonance_high)-(LF_signal[n]))
+        # elif resonance_low - .1 < LF_signal[n] < resonance_low + .1:
+        #     HF_signal[n] = random.random()/10 + 2 + 5*abs((resonance_low)-(LF_signal[n]))
+        # Triple Peak
+        resonance_high = resonance_frq + .3
+        resonance_low = resonance_frq - .3
+        if resonance_high - .1 < LF_signal[n] < resonance_high + .1:
+            HF_signal[n] = random.random()/10 + 2.5 + 5*abs((resonance_high)-(LF_signal[n]))
+        elif resonance_low - .1 < LF_signal[n] < resonance_low + .1:
+            HF_signal[n] = random.random()/10 + 2.5 + 5*abs((resonance_low)-(LF_signal[n]))
+        elif resonance_frq - .1 < LF_signal[n] < resonance_frq + .1:
+            HF_signal[n] = random.random()/10 + 1.5 + 7*abs((resonance_frq)-(LF_signal[n]))
+
     return data_points, HF_signal, LF_signal
 
-# TODO Plot High Frequency setting
+
 def plot(time, signal, sine_wave, HF_setting):
     # Plot the Signals
     plt.style.use('dark_background')
@@ -32,6 +49,7 @@ def plot(time, signal, sine_wave, HF_setting):
     ax1.grid(color='dimgrey')
     ax1.set_xticklabels([])
     ax1.set_yticklabels([])
+    ax1.set_ylim((0.5, 4.1))
     ax2.plot(time, sine_wave, color='deepskyblue')
     ax2.set_title("LF Signal")
     # ax2.set_ylim((0, 5))
