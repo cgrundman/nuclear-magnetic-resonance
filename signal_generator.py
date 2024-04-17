@@ -4,38 +4,46 @@ import matplotlib.pyplot as plt
 import random
 
 
-# TODO connect resonance_frq to HF_setting
+
 # TODO rename vaiables for clarity
 # TODO make save signal as data
 # TODO create searies of data through 16-20 MHz.
-def generate_signal(resonance_frq):
+# TODO remove coefficients for peak decay, replace with automatic adjustment back to "normal"
+def generate_signal(material, HF_setting):
+
+    # Extract Material Properties
+    resonances = material["Resonances"]
+
     # Create a random signal
     data_points = np.linspace(0, 0.1, 2000) # generate data points
     
     LF_signal = np.sin(2 * pi * 28 * data_points) + 1  # set 28Hz frequency
 
-    # Conditionally set the y values
+    # Create Baseline Signal
     HF_signal = np.random.rand(len(data_points)) + 3
-    for n in range(len(data_points)):
-        # Single Peak
-        if resonance_frq - .1 < LF_signal[n] < resonance_frq + .1:
-            HF_signal[n] = random.random()/10 + 1 + 25*abs(resonance_frq-LF_signal[n])
-        # Double Peak
-        # resonance_high = resonance_frq + .25
-        # resonance_low = resonance_frq - .25
-        # if resonance_high - .1 < LF_signal[n] < resonance_high + .1:
-        #     HF_signal[n] = random.random()/10 + 2 + 5*abs((resonance_high)-(LF_signal[n]))
-        # elif resonance_low - .1 < LF_signal[n] < resonance_low + .1:
-        #     HF_signal[n] = random.random()/10 + 2 + 5*abs((resonance_low)-(LF_signal[n]))
-        # Triple Peak
-        # resonance_high = resonance_frq + .3
-        # resonance_low = resonance_frq - .3
-        # if resonance_high - .1 < LF_signal[n] < resonance_high + .1:
-        #     HF_signal[n] = random.random()/10 + 2.5 + 5*abs((resonance_high)-(LF_signal[n]))
-        # elif resonance_low - .1 < LF_signal[n] < resonance_low + .1:
-        #     HF_signal[n] = random.random()/10 + 2.5 + 5*abs((resonance_low)-(LF_signal[n]))
-        # elif resonance_frq - .1 < LF_signal[n] < resonance_frq + .1:
-        #     HF_signal[n] = random.random()/10 + 1.5 + 7*abs((resonance_frq)-(LF_signal[n]))
+
+    # Chack for and Calculate resonances
+    for resonance in resonances:
+        for n in range(len(data_points)):
+            # Single Peak
+            if resonance - .1 < LF_signal[n] + HF_setting < resonance + .1:
+                HF_signal[n] = random.random()/10 + 1 + 25*abs((resonance-HF_setting)-LF_signal[n])
+            # Double Peak
+            # resonance_high = resonance + .25
+            # resonance_low = resonance - .25
+            # if resonance_high - .1 < LF_signal[n] + HF_setting < resonance_high + .1:
+            #     HF_signal[n] = random.random()/10 + 2 + 10*abs((resonance_high-HF_setting)-(LF_signal[n]))
+            # elif resonance_low - .1 < LF_signal[n] + HF_setting < resonance_low + .1:
+            #     HF_signal[n] = random.random()/10 + 2 + 10*abs((resonance_low-HF_setting)-(LF_signal[n]))
+            # Triple Peak
+            # resonance_high = resonance + .3
+            # resonance_low = resonance - .3
+            # if resonance_high - .1 < LF_signal[n] + HF_setting < resonance_high + .1:
+            #     HF_signal[n] = random.random()/10 + 2.5 + 5*abs((resonance_high-HF_setting)-(LF_signal[n]))
+            # elif resonance_low - .1 < LF_signal[n] + HF_setting < resonance_low + .1:
+            #     HF_signal[n] = random.random()/10 + 2.5 + 5*abs((resonance_low-HF_setting)-(LF_signal[n]))
+            # elif resonance - .1 < LF_signal[n] + HF_setting < resonance + .1:
+            #     HF_signal[n] = random.random()/10 + 1.5 + 7*abs((resonance-HF_setting)-(LF_signal[n]))
 
     return data_points, HF_signal, LF_signal
 
@@ -60,27 +68,35 @@ def plot(time, NMR_signal, LF_signal, HF_setting, iteration):
     ax2.grid(color='dimgrey')
     ax2.set_xticklabels([])
     ax2.set_yticklabels([])
-    plt.savefig(f"resonance_sweep/sample_signal_{iteration}.png")
+    plt.savefig(f"figures/material_sample_{iteration}.png")
     plt.close()
 
 
+# TODO define materials with pek types and resonance points
 # TODO add randomness to the HF setting (intended vs measured)
 if __name__ == '__main__':
 
+    # Create Material
+    material = {
+        'Name': "Material 1",
+        'Resonances': [16.5, 18, 19]
+    }
+
     # Looped Sweep
-    for i in range(50):
+    # for i in range(50):
 
-        resonance_frq = i/20 - .25
+    #     resonance_frq = i/20 - .25
 
-        t, b, n = generate_signal(resonance_frq)
+    #     t, b, n = generate_signal(resonance_frq)
 
-        HF_setting = 18 + i/40
-        plot(t, b, n, HF_setting, i)
+    #     HF_setting = 18 + i/40
+    #     plot(t, b, n, HF_setting, i)
 
-    # # Single Iteration
-    # resonance_frq = 1
-    # t, b, n = generate_signal(resonance_frq)
-    # HF_setting = 19
-    # plot(t, b, n, HF_setting, 1)
+    # Single Iteration
+    resonance_frq = 1
+    HF_setting = 18.5
+    t, b, n = generate_signal(material, HF_setting)
+    
+    plot(t, b, n, HF_setting, 1)
 
     print("Troubleshooting step")
