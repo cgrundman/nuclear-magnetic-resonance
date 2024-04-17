@@ -13,6 +13,7 @@ def generate_signal(material, HF_actual):
 
     # Extract Material Properties
     resonances = material["Resonances"]
+    peaks = material["Peaks"]
 
     # Create a random signal
     data_points = np.linspace(0, 0.1, 2000) # generate data points
@@ -23,31 +24,36 @@ def generate_signal(material, HF_actual):
     HF_signal = np.random.rand(len(data_points)) + 3
 
     # Chack for and Calculate resonances
-    for resonance in resonances:
+    for i in range(len(resonances)):
+        resonance = resonances[i]
+        peak = peaks[i]
         for n in range(len(data_points)):
-            # Single Peak
-            if resonance - .05 < LF_signal[n] + HF_actual < resonance + .05:
-                HF_signal[n] = random.random()/10 + 1 + 50*abs((resonance-HF_actual)-LF_signal[n])
+            if peak == 1:
+                # Single Peak
+                if resonance - .05 < LF_signal[n] + HF_actual < resonance + .05:
+                    HF_signal[n] = random.random()/10 + 1 + 50*abs((resonance-HF_actual)-LF_signal[n])
+            elif peak == 2:
             # Double Peak
-            # resonance_high = resonance + .05
-            # resonance_low = resonance - .05
-            # if resonance_high - .02 < LF_signal[n] + HF_actual < resonance_high + .02:
-            #     HF_signal[n] = random.random()/10 + 2 + 45*abs((resonance_high-HF_actual)-(LF_signal[n]))
-            # elif resonance_low - .02 < LF_signal[n] + HF_actual < resonance_low + .02:
-            #     HF_signal[n] = random.random()/10 + 2 + 45*abs((resonance_low-HF_actual)-(LF_signal[n]))
+                resonance_high = resonance + .05
+                resonance_low = resonance - .05
+                if resonance_high - .02 < LF_signal[n] + HF_actual < resonance_high + .02:
+                    HF_signal[n] = random.random()/10 + 2 + 45*abs((resonance_high-HF_actual)-(LF_signal[n]))
+                elif resonance_low - .02 < LF_signal[n] + HF_actual < resonance_low + .02:
+                    HF_signal[n] = random.random()/10 + 2 + 45*abs((resonance_low-HF_actual)-(LF_signal[n]))
             # Triple Peak
-            # resonance_high = resonance + .05
-            # resonance_low = resonance - .05
-            # if resonance_high - .02 < LF_signal[n] + HF_actual < resonance_high + .02:
-            #     HF_signal[n] = random.random()/10 + 2.5 + 40*abs((resonance_high-HF_actual)-(LF_signal[n]))
-            # elif resonance_low - .02 < LF_signal[n] + HF_actual < resonance_low + .02:
-            #     HF_signal[n] = random.random()/10 + 2.5 + 40*abs((resonance_low-HF_actual)-(LF_signal[n]))
-            # elif resonance - .02 < LF_signal[n] + HF_actual < resonance + .02:
-            #     HF_signal[n] = random.random()/10 + 1.5 + 50*abs((resonance-HF_actual)-(LF_signal[n]))
+            elif peak == 3:
+                resonance_high = resonance + .05
+                resonance_low = resonance - .05
+                if resonance_high - .02 < LF_signal[n] + HF_actual < resonance_high + .02:
+                    HF_signal[n] = random.random()/10 + 2.5 + 40*abs((resonance_high-HF_actual)-(LF_signal[n]))
+                elif resonance_low - .02 < LF_signal[n] + HF_actual < resonance_low + .02:
+                    HF_signal[n] = random.random()/10 + 2.5 + 40*abs((resonance_low-HF_actual)-(LF_signal[n]))
+                elif resonance - .02 < LF_signal[n] + HF_actual < resonance + .02:
+                    HF_signal[n] = random.random()/10 + 1.5 + 50*abs((resonance-HF_actual)-(LF_signal[n]))
 
     return data_points, HF_signal, LF_signal
 
-# TODO Plot the HF setting in with the same number of digits
+
 def plot(time, NMR_signal, LF_signal, HF_setting, HF_actual, iteration):
     # Plot the Signals
     plt.style.use('dark_background')
@@ -75,13 +81,13 @@ def plot(time, NMR_signal, LF_signal, HF_setting, HF_actual, iteration):
 
 
 # TODO define materials with peak types and resonance points
-# TODO add randomness to the HF setting (intended vs measured)
 if __name__ == '__main__':
 
     # Create Material
     material = {
         'Name': "Material 1",
-        'Resonances': [16.5, 18, 19]
+        'Resonances': [16.5, 18, 19],
+        'Peaks': [1, 2, 1]
     }
 
     # Looped Sweep
@@ -102,4 +108,3 @@ if __name__ == '__main__':
     # HF_setting = 18.5
     # t, b, n = generate_signal(material, HF_setting)
     # plot(t, b, n, HF_setting, 1)
-    
