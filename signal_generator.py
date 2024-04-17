@@ -17,7 +17,7 @@ def generate_signal(material, HF_setting):
     # Create a random signal
     data_points = np.linspace(0, 0.1, 2000) # generate data points
     
-    LF_signal = np.sin(2 * pi * 28 * data_points) + 1  # set 28Hz frequency
+    LF_signal = (np.sin(2 * pi * 28 * data_points) + 1)*.2  # set 28Hz frequency
 
     # Create Baseline Signal
     HF_signal = np.random.rand(len(data_points)) + 3
@@ -26,24 +26,24 @@ def generate_signal(material, HF_setting):
     for resonance in resonances:
         for n in range(len(data_points)):
             # Single Peak
-            if resonance - .1 < LF_signal[n] + HF_setting < resonance + .1:
-                HF_signal[n] = random.random()/10 + 1 + 25*abs((resonance-HF_setting)-LF_signal[n])
+            # if resonance - .05 < LF_signal[n] + HF_setting < resonance + .05:
+            #     HF_signal[n] = random.random()/10 + 1 + 50*abs((resonance-HF_setting)-LF_signal[n])
             # Double Peak
-            # resonance_high = resonance + .25
-            # resonance_low = resonance - .25
-            # if resonance_high - .1 < LF_signal[n] + HF_setting < resonance_high + .1:
-            #     HF_signal[n] = random.random()/10 + 2 + 10*abs((resonance_high-HF_setting)-(LF_signal[n]))
-            # elif resonance_low - .1 < LF_signal[n] + HF_setting < resonance_low + .1:
-            #     HF_signal[n] = random.random()/10 + 2 + 10*abs((resonance_low-HF_setting)-(LF_signal[n]))
+            # resonance_high = resonance + .05
+            # resonance_low = resonance - .05
+            # if resonance_high - .02 < LF_signal[n] + HF_setting < resonance_high + .02:
+            #     HF_signal[n] = random.random()/10 + 2 + 45*abs((resonance_high-HF_setting)-(LF_signal[n]))
+            # elif resonance_low - .02 < LF_signal[n] + HF_setting < resonance_low + .02:
+            #     HF_signal[n] = random.random()/10 + 2 + 45*abs((resonance_low-HF_setting)-(LF_signal[n]))
             # Triple Peak
-            # resonance_high = resonance + .3
-            # resonance_low = resonance - .3
-            # if resonance_high - .1 < LF_signal[n] + HF_setting < resonance_high + .1:
-            #     HF_signal[n] = random.random()/10 + 2.5 + 5*abs((resonance_high-HF_setting)-(LF_signal[n]))
-            # elif resonance_low - .1 < LF_signal[n] + HF_setting < resonance_low + .1:
-            #     HF_signal[n] = random.random()/10 + 2.5 + 5*abs((resonance_low-HF_setting)-(LF_signal[n]))
-            # elif resonance - .1 < LF_signal[n] + HF_setting < resonance + .1:
-            #     HF_signal[n] = random.random()/10 + 1.5 + 7*abs((resonance-HF_setting)-(LF_signal[n]))
+            resonance_high = resonance + .05
+            resonance_low = resonance - .05
+            if resonance_high - .02 < LF_signal[n] + HF_setting < resonance_high + .02:
+                HF_signal[n] = random.random()/10 + 2.5 + 40*abs((resonance_high-HF_setting)-(LF_signal[n]))
+            elif resonance_low - .02 < LF_signal[n] + HF_setting < resonance_low + .02:
+                HF_signal[n] = random.random()/10 + 2.5 + 40*abs((resonance_low-HF_setting)-(LF_signal[n]))
+            elif resonance - .02 < LF_signal[n] + HF_setting < resonance + .02:
+                HF_signal[n] = random.random()/10 + 1.5 + 50*abs((resonance-HF_setting)-(LF_signal[n]))
 
     return data_points, HF_signal, LF_signal
 
@@ -68,7 +68,7 @@ def plot(time, NMR_signal, LF_signal, HF_setting, iteration):
     ax2.grid(color='dimgrey')
     ax2.set_xticklabels([])
     ax2.set_yticklabels([])
-    plt.savefig(f"figures/material_sample_{iteration}.png")
+    plt.savefig(f"full_sweep/material_sample_{iteration}.png")
     plt.close()
 
 
@@ -83,20 +83,21 @@ if __name__ == '__main__':
     }
 
     # Looped Sweep
-    # for i in range(50):
+    HF_setting = 16
+    iteration = 0
+    while HF_setting < 18:
 
-    #     resonance_frq = i/20 - .25
+        t, b, n = generate_signal(material, HF_setting)
 
-    #     t, b, n = generate_signal(resonance_frq)
+        plot(t, b, n, HF_setting, iteration)
 
-    #     HF_setting = 18 + i/40
-    #     plot(t, b, n, HF_setting, i)
+        HF_setting += .0625
+        iteration += 1
 
-    # Single Iteration
-    resonance_frq = 1
-    HF_setting = 18.5
-    t, b, n = generate_signal(material, HF_setting)
-    
-    plot(t, b, n, HF_setting, 1)
+    # # Single Iteration
+    # resonance_frq = 1
+    # HF_setting = 18.5
+    # t, b, n = generate_signal(material, HF_setting)
+    # plot(t, b, n, HF_setting, 1)
 
     print("Troubleshooting step")
