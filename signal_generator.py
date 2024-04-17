@@ -18,8 +18,8 @@ def generate_signal(resonance_frq):
     HF_signal = np.random.rand(len(data_points)) + 3
     for n in range(len(data_points)):
         # Single Peak
-        # if resonance_frq - .1 < LF_signal[n] < resonance_frq + .1:
-        #     HF_signal[n] = random.random()/10 + 1 + 25*abs(resonance_frq-LF_signal[n])
+        if resonance_frq - .1 < LF_signal[n] < resonance_frq + .1:
+            HF_signal[n] = random.random()/10 + 1 + 25*abs(resonance_frq-LF_signal[n])
         # Double Peak
         # resonance_high = resonance_frq + .25
         # resonance_low = resonance_frq - .25
@@ -28,18 +28,18 @@ def generate_signal(resonance_frq):
         # elif resonance_low - .1 < LF_signal[n] < resonance_low + .1:
         #     HF_signal[n] = random.random()/10 + 2 + 5*abs((resonance_low)-(LF_signal[n]))
         # Triple Peak
-        resonance_high = resonance_frq + .3
-        resonance_low = resonance_frq - .3
-        if resonance_high - .1 < LF_signal[n] < resonance_high + .1:
-            HF_signal[n] = random.random()/10 + 2.5 + 5*abs((resonance_high)-(LF_signal[n]))
-        elif resonance_low - .1 < LF_signal[n] < resonance_low + .1:
-            HF_signal[n] = random.random()/10 + 2.5 + 5*abs((resonance_low)-(LF_signal[n]))
-        elif resonance_frq - .1 < LF_signal[n] < resonance_frq + .1:
-            HF_signal[n] = random.random()/10 + 1.5 + 7*abs((resonance_frq)-(LF_signal[n]))
+        # resonance_high = resonance_frq + .3
+        # resonance_low = resonance_frq - .3
+        # if resonance_high - .1 < LF_signal[n] < resonance_high + .1:
+        #     HF_signal[n] = random.random()/10 + 2.5 + 5*abs((resonance_high)-(LF_signal[n]))
+        # elif resonance_low - .1 < LF_signal[n] < resonance_low + .1:
+        #     HF_signal[n] = random.random()/10 + 2.5 + 5*abs((resonance_low)-(LF_signal[n]))
+        # elif resonance_frq - .1 < LF_signal[n] < resonance_frq + .1:
+        #     HF_signal[n] = random.random()/10 + 1.5 + 7*abs((resonance_frq)-(LF_signal[n]))
 
     return data_points, HF_signal, LF_signal
 
-
+# TODO Plot the HF setting in with the same number of digits
 def plot(time, NMR_signal, LF_signal, HF_setting, iteration):
     # Plot the Signals
     plt.style.use('dark_background')
@@ -61,17 +61,26 @@ def plot(time, NMR_signal, LF_signal, HF_setting, iteration):
     ax2.set_xticklabels([])
     ax2.set_yticklabels([])
     plt.savefig(f"resonance_sweep/sample_signal_{iteration}.png")
+    plt.close()
 
 
+# TODO add randomness to the HF setting (intended vs measured)
 if __name__ == '__main__':
 
-    for i in range(20):
+    # Looped Sweep
+    for i in range(50):
 
-        resonance_frq = i/10
+        resonance_frq = i/20 - .25
 
         t, b, n = generate_signal(resonance_frq)
 
-        HF_setting = 18 + i/20
+        HF_setting = 18 + i/40
         plot(t, b, n, HF_setting, i)
+
+    # # Single Iteration
+    # resonance_frq = 1
+    # t, b, n = generate_signal(resonance_frq)
+    # HF_setting = 19
+    # plot(t, b, n, HF_setting, 1)
 
     print("Troubleshooting step")
