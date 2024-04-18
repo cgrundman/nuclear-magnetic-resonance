@@ -15,7 +15,7 @@ def generate_signal(material, HF_actual):
     peaks = material["Peaks"]
 
     # Create a random signal
-    data_points = np.linspace(0, 0.1, 2000) # generate data points
+    data_points = np.linspace(0, 6/28, 2000) # generate data points
     
     LF_signal = (np.sin(2 * pi * 28 * data_points) + 1)*.2  # set 28Hz frequency
 
@@ -82,14 +82,14 @@ def plot(time, NMR_signal, LF_signal, HF_setting, HF_actual, iteration):
 
     ax1.plot(time, NMR_signal, color='lightcoral')
     ax1.set_title("NMR Signal")
-    ax1.set_xlim((0, 0.1))
+    ax1.set_xlim((0, 6/28))
     ax1.grid(color='dimgrey')
     ax1.set_xticklabels([])
     ax1.set_yticklabels([])
     ax1.set_ylim((0.5, 4.1))
     ax2.plot(time, LF_signal, color='deepskyblue')
     ax2.set_title("LF Signal")
-    ax2.set_xlim((0, 0.1))
+    ax2.set_xlim((0, 6/28))
     ax2.grid(color='dimgrey')
     ax2.set_xticklabels([])
     ax2.set_yticklabels([])
@@ -124,9 +124,3 @@ if __name__ == '__main__':
     }
 
     sweep(material)
-
-    # # Single Iteration
-    # resonance_frq = 1
-    # HF_setting = 18.5
-    # t, b, n = generate_signal(material, HF_setting)
-    # plot(t, b, n, HF_setting, 1)
