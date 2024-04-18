@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import random
 
 
-
 # TODO rename vaiables for clarity
 # TODO make save signal as data
 # TODO create searies of data through 16-20 MHz.
@@ -54,14 +53,32 @@ def generate_signal(material, HF_actual):
     return data_points, HF_signal, LF_signal
 
 
+def sweep(material):
+    # Looped Sweep
+    HF_setting = 16
+    iteration = 0
+    while HF_setting <= 20:
+
+        # Create actual HF signal setting
+        HF_actual = HF_setting + ((random.random()-.5)/50)
+
+        # Generate the signal for current settings
+        t, b, n = generate_signal(material, HF_actual)
+
+        # Plot 
+        plot(t, b, n, HF_setting, HF_actual, iteration)
+
+        HF_setting += .03125
+        iteration += 1
+    return "Sweep Complete"
+
+
 def plot(time, NMR_signal, LF_signal, HF_setting, HF_actual, iteration):
     # Plot the Signals
     plt.style.use('dark_background')
     fig, (ax1, ax2) = plt.subplots(2, 1)
 
     fig.suptitle(f"Setting: {HF_setting:.4f} MHz      Actual: {round(HF_actual, 4)} MHz")
-
-    
 
     ax1.plot(time, NMR_signal, color='lightcoral')
     ax1.set_title("NMR Signal")
@@ -80,28 +97,33 @@ def plot(time, NMR_signal, LF_signal, HF_setting, HF_actual, iteration):
     plt.close()
 
 
+# TODO make function that performs the iteration, only have the inputs in the main loop
 # TODO define materials with peak types and resonance points
 if __name__ == '__main__':
 
     # Create Material
     material = {
         'Name': "Material 1",
-        'Resonances': [16.5, 18, 19],
+        'Resonances': [16.5, 18, 19.1],
         'Peaks': [1, 2, 1]
     }
+    material = {
+        'Name': "Material 2",
+        'Resonances': [17],
+        'Peaks': [1]
+    }
+    material = {
+        'Name': "Material 3",
+        'Resonances': [18.4],
+        'Peaks': [3]
+    }
+    material = {
+        'Name': "Material 4",
+        'Resonances': [16.8, 18.9],
+        'Peaks': [1, 3]
+    }
 
-    # Looped Sweep
-    HF_setting = 16
-    iteration = 0
-    while HF_setting < 20:
-
-        HF_actual = HF_setting + ((random.random()-.5)/50)
-        t, b, n = generate_signal(material, HF_actual)
-
-        plot(t, b, n, HF_setting, HF_actual, iteration)
-
-        HF_setting += .0625
-        iteration += 1
+    sweep(material)
 
     # # Single Iteration
     # resonance_frq = 1
