@@ -2,7 +2,7 @@ from math import *
 import numpy as np
 import matplotlib.pyplot as plt
 import random
-import csv
+import json
 
 
 # TODO rename vaiables for clarity
@@ -50,11 +50,15 @@ def generate_signal(material, HF_actual):
                     HF_signal[n] = random.random()/10 + 2.5 + 40*abs((resonance_low-HF_actual)-(LF_signal[n]))
                 elif resonance - .02 < LF_signal[n] + HF_actual < resonance + .02:
                     HF_signal[n] = random.random()/10 + 1.5 + 50*abs((resonance-HF_actual)-(LF_signal[n]))
-        with open('data/file.csv', 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow([material["Name"], HF_actual])
-            writer.writerow([LF_signal])
-            writer.writerow([HF_signal])
+        signal_data = {
+            'name': material['Name'],
+            'hf_setting': HF_actual,
+            'hf_signal': HF_signal,
+            'lf_signal': LF_signal
+        }
+        save_file = open("data/json_data.json", "w")
+        json.dump(signal_data, save_file)  
+        save_file.close()
 
     return data_points, HF_signal, LF_signal
 
@@ -72,7 +76,7 @@ def sweep(material):
         t, b, n = generate_signal(material, HF_actual)
 
         # Plot 
-        plot(t, b, n, HF_setting, HF_actual, iteration)
+        # plot(t, b, n, HF_setting, HF_actual, iteration)
 
         HF_setting += .03125
         iteration += 1
