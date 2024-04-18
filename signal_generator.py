@@ -2,6 +2,7 @@ from math import *
 import numpy as np
 import matplotlib.pyplot as plt
 import random
+import csv
 
 
 # TODO rename vaiables for clarity
@@ -49,6 +50,11 @@ def generate_signal(material, HF_actual):
                     HF_signal[n] = random.random()/10 + 2.5 + 40*abs((resonance_low-HF_actual)-(LF_signal[n]))
                 elif resonance - .02 < LF_signal[n] + HF_actual < resonance + .02:
                     HF_signal[n] = random.random()/10 + 1.5 + 50*abs((resonance-HF_actual)-(LF_signal[n]))
+        with open('data/file.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([material["Name"], HF_actual])
+            writer.writerow([LF_signal])
+            writer.writerow([HF_signal])
 
     return data_points, HF_signal, LF_signal
 
@@ -57,7 +63,7 @@ def sweep(material):
     # Looped Sweep
     HF_setting = 16
     iteration = 0
-    while HF_setting <= 20:
+    while HF_setting <= 16:
 
         # Create actual HF signal setting
         HF_actual = HF_setting + ((random.random()-.5)/50)
