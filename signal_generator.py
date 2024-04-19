@@ -15,6 +15,7 @@ def generate_signal(material, HF_actual):
     # Create a random signal
     data_points = np.linspace(0, 5/28, 2000) # generate data points
     
+    # Create low frequency signal
     LF_signal = (np.sin(2 * pi * 28 * data_points - pi/2) + 1)*.2  # set 28Hz frequency
 
     # Create Baseline Signal
@@ -64,6 +65,7 @@ def trim_signal(time, NMR_signal, LF_signal):
             idx_points[1,j] = np.where(time==time[n])[0]
             j += 1
 
+    # Trim the data
     LF_trimmed = []
     NMR_trimmed =  []
     for i in range(len(idx_points[0,:])):
@@ -76,6 +78,7 @@ def trim_signal(time, NMR_signal, LF_signal):
     return time_trimmed, NMR_trimmed, LF_trimmed
 
 
+# TODO make unique IDs for folders
 def save_signal(NMR, LF, set_point, name):
 
     # Create save folder
@@ -113,8 +116,6 @@ def sweep(material):
 
         HF_setting += .03125
         iteration += 1
-
-    return "Sweep Complete"
 
 
 def plot_trimmed(time, NMR_signal, LF_signal, HF_setting, HF_actual):
@@ -240,7 +241,6 @@ def plot(time, NMR_signal, LF_signal, HF_setting, HF_actual):
     plt.close()
 
 
-# TODO define materials with peak types and resonance points
 if __name__ == '__main__':
 
     # Create Material
@@ -280,6 +280,6 @@ if __name__ == '__main__':
 
     for material in materials:
         name = material["Name"]
-        print(f"Simulating: {name}\n")
-        
+        print(f"Simulating: {name}")
+
         sweep(material)
