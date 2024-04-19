@@ -63,9 +63,29 @@ def generate_signal(material, HF_actual):
     return data_points, HF_signal, LF_signal
 
 
-# TODO populate function
-def trim_signal():
-    pass
+def trim_signal(time, NMR_signal, LF_signal):
+
+    # Create trim ranges
+    idx_points = np.zeros([2,5])
+    i, j = 0, 0
+    for n in range(len(LF_signal)):
+        if LF_signal[n-1]<=.1 and LF_signal[n]>=.1:
+            idx_points[0,i] = np.where(time==time[n])[0]
+            i += 1
+        if LF_signal[n-1]<=.3 and LF_signal[n]>=.3:
+            idx_points[1,j] = np.where(time==time[n])[0]
+            j += 1
+
+    LF_trimmed = []
+    NMR_trimmed =  []
+    for i in range(len(idx_points[0,:])):
+        min_idx = int(idx_points[0,i])
+        max_idx = int(idx_points[1,i])
+        LF_trimmed = np.append(LF_trimmed, LF_signal[min_idx:max_idx])
+        NMR_trimmed = np.append(NMR_trimmed, NMR_signal[min_idx:max_idx])
+    time_trimmed = time[:int(len(NMR_trimmed))]
+
+    return time_trimmed, NMR_trimmed, LF_trimmed
 
 
 def sweep(material):
@@ -78,18 +98,23 @@ def sweep(material):
         HF_actual = HF_setting + ((random.random()-.5)/50)
 
         # Generate the signal for current settings
-        t, b, n = generate_signal(material, HF_actual)
-
-        # Trim the signal for usable parts
-        trim_signal()
+        time, NMR_signal, LF_signal = generate_signal(material, HF_actual)
 
         # Plot
-        plot(t, b, n, HF_setting, HF_actual)
-        plot_regions(t, b, n, HF_setting, HF_actual)
-        plot_trimmed(t, b, n, HF_setting, HF_actual)
+        plot(time, NMR_signal, LF_signal, HF_setting, HF_actual)
+        plot_regions(time, NMR_signal, LF_signal, HF_setting, HF_actual)
+        plot_trimmed(time, NMR_signal, LF_signal, HF_setting, HF_actual)
+
+        # Trim the signal for usable parts
+        time_trimmed, NMR_trimmed, LF_trimmed = trim_signal(time, NMR_signal, LF_signal)
+
+        print(len(time_trimmed))
+        print(len(NMR_trimmed))
+        print(len(LF_trimmed))
 
         HF_setting += .03125
         iteration += 1
+        
     return "Sweep Complete"
 
 
