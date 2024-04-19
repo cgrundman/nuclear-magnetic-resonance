@@ -5,7 +5,7 @@ import random
 import json
 
 
-# TODO rename vaiables for clarity
+# TODO rename variables for clarity
 # TODO make save signal as data
 # TODO create searies of data through 16-20 MHz.
 # TODO remove coefficients for peak decay, replace with automatic adjustment back to "normal"
@@ -63,6 +63,11 @@ def generate_signal(material, HF_actual):
     return data_points, HF_signal, LF_signal
 
 
+# TODO populate function
+def trim_signal():
+    pass
+
+
 def sweep(material):
     # Looped Sweep
     HF_setting = 16
@@ -75,15 +80,69 @@ def sweep(material):
         # Generate the signal for current settings
         t, b, n = generate_signal(material, HF_actual)
 
-        # Plot 
-        plot(t, b, n, HF_setting, HF_actual, iteration)
+        # Trim the signal for usable parts
+        trim_signal()
+
+        # Plot
+        plot(t, b, n, HF_setting, HF_actual)
+        plot_regions(t, b, n, HF_setting, HF_actual)
+        plot_trimmed(t, b, n, HF_setting, HF_actual)
 
         HF_setting += .03125
         iteration += 1
     return "Sweep Complete"
 
 
-def plot(time, NMR_signal, LF_signal, HF_setting, HF_actual, iteration):
+def plot_trimmed(time, NMR_signal, LF_signal, HF_setting, HF_actual):
+
+    # Create trim ranges
+    idx_points = np.zeros([2,5])
+    i, j = 0, 0
+    for n in range(len(LF_signal)):
+        if LF_signal[n-1]<=.1 and LF_signal[n]>=.1:
+            idx_points[0,i] = np.where(time==time[n])[0]
+            i += 1
+        if LF_signal[n-1]<=.3 and LF_signal[n]>=.3:
+            idx_points[1,j] = np.where(time==time[n])[0]
+            j += 1
+
+    LF_trimmed = []
+    NMR_trimmed =  []
+    for i in range(len(idx_points[0,:])):
+        min_idx = int(idx_points[0,i])
+        max_idx = int(idx_points[1,i])
+        LF_trimmed = np.append(LF_trimmed, LF_signal[min_idx:max_idx])
+        NMR_trimmed = np.append(NMR_trimmed, NMR_signal[min_idx:max_idx])
+    time_trimmed = time[:int(len(NMR_trimmed))]
+
+    # Plot the Signals
+    plt.style.use('dark_background')
+    fig, (ax1, ax2) = plt.subplots(2, 1)
+    fig.suptitle(f"Setting: {HF_setting:.4f} MHz      Actual: {round(HF_actual, 4)} MHz")
+
+    # Subplot 1
+    ax1.plot(time_trimmed, NMR_trimmed, color='lightcoral')
+    ax1.set_title("NMR Signal")
+    ax1.grid(color='dimgrey')
+    ax1.set_xticklabels([])
+    ax1.set_yticklabels([])
+    ax1.set_xlim((0, time_trimmed[-1]))
+    ax1.set_ylim((0.5, 4.1))
+
+    # Subplot 2
+    ax2.plot(time_trimmed, LF_trimmed, color='deepskyblue')
+    ax2.set_title("LF Signal")
+    ax2.grid(color='dimgrey')
+    ax2.set_xticklabels([])
+    ax2.set_yticklabels([])
+    ax2.set_xlim((0, time_trimmed[-1]))
+    
+    # Save and close plot
+    plt.savefig(f"figures/trimmed_data.png")
+    plt.close()
+
+
+def plot_regions(time, NMR_signal, LF_signal, HF_setting, HF_actual):
     
     # Plot the Signals
     plt.style.use('dark_background')
@@ -109,7 +168,7 @@ def plot(time, NMR_signal, LF_signal, HF_setting, HF_actual, iteration):
     ax2.set_xlim((0, 5/28))
 
     # Create highlighted ranges
-    range_points = np.zeros([2,6])
+    range_points = np.zeros([2,5])
     i, j = 0, 0
     for n in range(len(LF_signal)):
         if LF_signal[n-1]<=.1 and LF_signal[n]>=.1:
@@ -123,7 +182,37 @@ def plot(time, NMR_signal, LF_signal, HF_setting, HF_actual, iteration):
         ax2.axvspan(range_points[0,i], range_points[1,i], color='yellow', alpha=0.5)
 
     # Save and close plot
-    plt.savefig(f"full_sweep/material_sample_{iteration}.png")
+    plt.savefig(f"figures/highlighted_data.png")
+    plt.close()
+
+
+def plot(time, NMR_signal, LF_signal, HF_setting, HF_actual):
+    
+    # Plot the Signals
+    plt.style.use('dark_background')
+    fig, (ax1, ax2) = plt.subplots(2, 1)
+    fig.suptitle(f"Setting: {HF_setting:.4f} MHz      Actual: {round(HF_actual, 4)} MHz")
+
+    # Subplot 1
+    ax1.plot(time, NMR_signal, color='lightcoral')
+    ax1.set_title("NMR Signal")
+    ax1.grid(color='dimgrey')
+    ax1.set_xticklabels([])
+    ax1.set_yticklabels([])
+    
+    ax1.set_xlim((0, 5/28))
+    ax1.set_ylim((0.5, 4.1))
+
+    # Subplot 2
+    ax2.plot(time, LF_signal, color='deepskyblue')
+    ax2.set_title("LF Signal")
+    ax2.grid(color='dimgrey')
+    ax2.set_xticklabels([])
+    ax2.set_yticklabels([])
+    ax2.set_xlim((0, 5/28))
+
+    # Save and close plot
+    plt.savefig(f"figures/full_data_iteration.png")
     plt.close()
 
 
