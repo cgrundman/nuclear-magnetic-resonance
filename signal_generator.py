@@ -5,9 +5,6 @@ import random
 import json
 
 
-# TODO rename variables for clarity
-# TODO make save signal as data
-# TODO create searies of data through 16-20 MHz.
 # TODO remove coefficients for peak decay, replace with automatic adjustment back to "normal"
 def generate_signal(material, HF_actual):
 
@@ -50,15 +47,6 @@ def generate_signal(material, HF_actual):
                     HF_signal[n] = random.random()/10 + 2.5 + 40*abs((resonance_low-HF_actual)-(LF_signal[n]))
                 elif resonance - .02 < LF_signal[n] + HF_actual < resonance + .02:
                     HF_signal[n] = random.random()/10 + 1.5 + 50*abs((resonance-HF_actual)-(LF_signal[n]))
-        # signal_data = {
-        #     'name': material['Name'],
-        #     'hf_setting': HF_actual,
-        #     'hf_signal': HF_signal,
-        #     'lf_signal': LF_signal
-        # }
-        # save_file = open("data/json_data.json", "w")
-        # json.dump(signal_data, save_file)  
-        # save_file.close()
 
     return data_points, HF_signal, LF_signal
 
@@ -88,11 +76,19 @@ def trim_signal(time, NMR_signal, LF_signal):
     return time_trimmed, NMR_trimmed, LF_trimmed
 
 
+def save_signal(NMR, LF, set_point):
+
+    # Save signals to JSON
+    set_point = int(set_point*10000) 
+    np.savetxt(f"data/{set_point}_nmr.txt", NMR)
+    np.savetxt(f"data/{set_point}_lf.txt", LF)
+
+
 def sweep(material):
     # Looped Sweep
     HF_setting = 16
     iteration = 0
-    while HF_setting <= 16:
+    while HF_setting <= 20:
 
         # Create actual HF signal setting
         HF_actual = HF_setting + ((random.random()-.5)/50)
@@ -101,12 +97,14 @@ def sweep(material):
         time, NMR_signal, LF_signal = generate_signal(material, HF_actual)
 
         # Plot
-        plot(time, NMR_signal, LF_signal, HF_setting, HF_actual)
-        plot_regions(time, NMR_signal, LF_signal, HF_setting, HF_actual)
-        plot_trimmed(time, NMR_signal, LF_signal, HF_setting, HF_actual)
+        # plot(time, NMR_signal, LF_signal, HF_setting, HF_actual)
+        # plot_regions(time, NMR_signal, LF_signal, HF_setting, HF_actual)
+        # plot_trimmed(time, NMR_signal, LF_signal, HF_setting, HF_actual)
 
         # Trim the signal for usable parts
         time_trimmed, NMR_trimmed, LF_trimmed = trim_signal(time, NMR_signal, LF_signal)
+
+        save_signal(NMR_trimmed, LF_trimmed, HF_actual)
 
         print(len(time_trimmed))
         print(len(NMR_trimmed))
@@ -114,7 +112,7 @@ def sweep(material):
 
         HF_setting += .03125
         iteration += 1
-        
+
     return "Sweep Complete"
 
 
@@ -241,7 +239,6 @@ def plot(time, NMR_signal, LF_signal, HF_setting, HF_actual):
     plt.close()
 
 
-# TODO make function that performs the iteration, only have the inputs in the main loop
 # TODO define materials with peak types and resonance points
 if __name__ == '__main__':
 
