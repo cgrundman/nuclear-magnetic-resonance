@@ -2,7 +2,7 @@ from math import *
 import numpy as np
 import matplotlib.pyplot as plt
 import random
-import json
+import os
 
 
 # TODO remove coefficients for peak decay, replace with automatic adjustment back to "normal"
@@ -76,12 +76,17 @@ def trim_signal(time, NMR_signal, LF_signal):
     return time_trimmed, NMR_trimmed, LF_trimmed
 
 
-def save_signal(NMR, LF, set_point):
+def save_signal(NMR, LF, set_point, name):
+
+    # Create save folder
+    newpath = f"data/unprocessed_nmr_data/{name}"
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
 
     # Save signals to JSON
     set_point = int(set_point*10000) 
-    np.savetxt(f"data/{set_point}_nmr.txt", NMR)
-    np.savetxt(f"data/{set_point}_lf.txt", LF)
+    np.savetxt(f"data/unprocessed_nmr_data/{name}/{set_point}_nmr.txt", NMR)
+    np.savetxt(f"data/unprocessed_nmr_data/{name}/{set_point}_lf.txt", LF)
 
 
 def sweep(material):
@@ -104,11 +109,7 @@ def sweep(material):
         # Trim the signal for usable parts
         time_trimmed, NMR_trimmed, LF_trimmed = trim_signal(time, NMR_signal, LF_signal)
 
-        save_signal(NMR_trimmed, LF_trimmed, HF_actual)
-
-        print(len(time_trimmed))
-        print(len(NMR_trimmed))
-        print(len(LF_trimmed))
+        save_signal(NMR_trimmed, LF_trimmed, HF_actual, name=material["Name"])
 
         HF_setting += .03125
         iteration += 1
@@ -243,34 +244,42 @@ def plot(time, NMR_signal, LF_signal, HF_setting, HF_actual):
 if __name__ == '__main__':
 
     # Create Material
-    material = {
-        'Name': "Material 1",
+    material_1 = {
+        'Name': "Material_1",
         'Resonances': [16.5, 18, 19.1],
         'Peaks': [1, 2, 1]
     }
-    material = {
-        'Name': "Material 2",
+    material_2 = {
+        'Name': "Material_2",
         'Resonances': [17],
         'Peaks': [1]
     }
-    material = {
-        'Name': "Material 3",
+    material_3 = {
+        'Name': "Material_3",
         'Resonances': [18.4],
         'Peaks': [3]
     }
-    material = {
-        'Name': "Material 4",
+    material_4 = {
+        'Name': "Material_4",
         'Resonances': [16.8, 18.9],
         'Peaks': [1, 3]
     }
-    material = {
-        'Name': "Material 5",
+    material_5 = {
+        'Name': "Material_5",
         'Resonances': [16.2, 17.5],
         'Peaks': [1, 1]
     }
 
-    sweep(material)
+    materials = [
+        material_1, 
+        material_2, 
+        material_3, 
+        material_4, 
+        material_5
+    ]
 
-    print("Sweep")
-    print("Stop")
-    print("End")
+    for material in materials:
+        name = material["Name"]
+        print(f"Simulating: {name}\n")
+        
+        sweep(material)
