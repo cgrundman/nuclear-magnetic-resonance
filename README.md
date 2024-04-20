@@ -12,7 +12,7 @@ The following gif shows a full sweep through the full range of high frequency .
 
 The simulated full data is seen below:
 
-<img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/full_sweep.png" />
+<img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/full_data_iteration.png" />
 
 The useful data ranges lie in the same data ranges. Because of error in the measurement, several samples are needed to reconstruct the signal. The valid ranges are where the rate of the low frequncy signal is 1) essentially flat and 2) increasing. It is important to only select the increasing rate regions, becuase the resonance happens differently depending on whether the low frequency signal is increasing or decreasing. These regions are highlighed in yellow below: 
 
