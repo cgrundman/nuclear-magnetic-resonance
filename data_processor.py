@@ -4,10 +4,10 @@ from matplotlib.gridspec import GridSpec
 import os
 
 
-# TODO load all data
-# TODO Combine all samples from the same HF setting
+# TODO pull hf setting from file name
 # TODO Combine two nmr samples with different HF settings
-# TODO Create single nmr resonance data 
+# TODO load all data 
+# TODO Create single nmr resonance data
 def process_data(path):
 
     # Single data load
@@ -15,16 +15,16 @@ def process_data(path):
     lf = np.loadtxt(path + "159947_lf.txt")
 
     # Merge data from single iteration
-    merge_iteration(nmr, lf)
+    nmr_iteration, lf_iteration = merge_iteration(nmr, lf)
 
-    # print(len(lf))
+    nmr_spectrum = np.zeros(1)
+    hf_setting = 0
 
-    pass
+    nmr_spectrum = iteration_combine(nmr_spectrum, nmr_iteration, lf_iteration, hf_setting)
+
+    return nmr_spectrum
 
 
-# TODO make each slice of data the same size
-# TODO plot this operation
-# TODO average all the data into the same list
 def merge_iteration(NMR_signal, LF_signal):
 
     # Identify where to slice the signals
@@ -50,7 +50,7 @@ def merge_iteration(NMR_signal, LF_signal):
         NMR_slices[i,:] = NMR_signal[seperator_list[i]:seperator_list[i]+slice_size]
         LF_slices[i,:] = LF_signal[seperator_list[i]:seperator_list[i]+slice_size]
         
-    # Merge Slices
+    # Merge the slices
     NMR_merged = np.zeros([np.shape(NMR_slices)[1]])
     LF_merged = np.zeros([np.shape(LF_slices)[1]])
     for data_point in range(np.shape(NMR_slices)[1]):
@@ -61,9 +61,17 @@ def merge_iteration(NMR_signal, LF_signal):
     LF_merged = LF_merged/5
 
     # Plot Slices
-    plot_merge_iteration(NMR_signal, NMR_slices, NMR_merged, LF_signal, LF_slices, LF_merged)
-    print(np.shape(NMR_merged))
-    print(np.shape(LF_merged))
+    # plot_merge_iteration(NMR_signal, NMR_slices, NMR_merged, LF_signal, LF_slices, LF_merged)
+
+    return NMR_merged, LF_merged
+
+
+# TODO make subspectrum range from LF signal and HF setting
+# TODO linearize the signal, define "blocks" of spectrum values
+# TODO combine two iterations based on x values
+# TODO trim or shape spectrum to a common range of frequencies (eg 16-20 MHz)
+def iteration_combine(Spectrum, NMR_iteration, LF_iteraiton, HF_setting):
+    return Spectrum
 
 
 # TODO make a loop to reduce code length in sliced plots
@@ -170,12 +178,12 @@ def plot_merge_iteration(NMR_signal, NMR_slices, NMR_merged, LF_signal, LF_slice
     plt.savefig(f"figures/merge_iteration.png")
     plt.close()
 
-
+# TODO save spectrum
 if __name__ == '__main__':
     path = 'data/unprocessed_nmr_data/Material_5/'
     directory = os.fsencode(path)
 
-    process_data(path)
+    nmr_spectrum = process_data(path)
 
     # # Iterate through NMR files
     # for file in os.listdir(directory):
