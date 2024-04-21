@@ -11,8 +11,8 @@ import os
 def process_data(path):
 
     # Single data load
-    nmr = np.loadtxt(path + "159938_nmr.txt")
-    lf = np.loadtxt(path + "159938_lf.txt")
+    nmr = np.loadtxt(path + "159947_nmr.txt")
+    lf = np.loadtxt(path + "159947_lf.txt")
 
     # Merge data from single iteration
     merge_iteration(nmr, lf)
@@ -66,6 +66,7 @@ def merge_iteration(NMR_signal, LF_signal):
     print(np.shape(LF_merged))
 
 
+# TODO make a loop to reduce code length in sliced plots
 def plot_merge_iteration(NMR_signal, NMR_slices, NMR_merged, LF_signal, LF_slices, LF_merged):
     
     # Define number of slices
@@ -92,7 +93,6 @@ def plot_merge_iteration(NMR_signal, NMR_slices, NMR_merged, LF_signal, LF_slice
     ax1.set_xticklabels([])
     ax1.set_yticklabels([])
 
-    
     # Data Slices
     ax4 = fig.add_subplot(gs[2,0])
     ax4.plot(NMR_slices[0,:], color='lightcoral')
@@ -151,20 +151,6 @@ def plot_merge_iteration(NMR_signal, NMR_slices, NMR_merged, LF_signal, LF_slice
     ax13.grid(color='dimgrey')
     ax13.set_xticklabels([])
     ax13.set_yticklabels([])
-    # for slice in range(slices):
-    #     ax[slice]
-    # x0 = 0
-    # for slice in range(slices):
-    #     num = slice + 2
-    #     x{num} = fig.add_subplot(gs[2,slice])
-        
-
-    # ax2.plot(time, LF_signal, color='deepskyblue')
-    # ax2.set_title("LF Signal")
-    # ax2.grid(color='dimgrey')
-    # ax2.set_xticklabels([])
-    # ax2.set_yticklabels([])
-    # ax2.set_xlim((0, 5/28))
 
     # Merged Data
     ax2 = fig.add_subplot(gs[4,1:-1])
@@ -180,20 +166,13 @@ def plot_merge_iteration(NMR_signal, NMR_slices, NMR_merged, LF_signal, LF_slice
     ax3.set_xticklabels([])
     ax3.set_yticklabels([])
 
-    # ax2.plot(time, LF_signal, color='deepskyblue')
-    # ax2.set_title("LF Signal")
-    # ax2.grid(color='dimgrey')
-    # ax2.set_xticklabels([])
-    # ax2.set_yticklabels([])
-    # ax2.set_xlim((0, 5/28))
-
     # Save and close plot
     plt.savefig(f"figures/merge_iteration.png")
     plt.close()
 
 
 if __name__ == '__main__':
-    path = 'data/unprocessed_nmr_data/Material_1/'
+    path = 'data/unprocessed_nmr_data/Material_5/'
     directory = os.fsencode(path)
 
     process_data(path)
