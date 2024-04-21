@@ -32,7 +32,7 @@ THe data processing step is broken down into 2 substeps: merge iteration and ite
 
 Merge iteration, as pictured below, is the process of using data collected from a common setting, and merging it to reduce noise from the data colection. The data was slices and saved as a single stream. This stream is resliced, and then the values averaged to smooth out errors.
 
-<img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/merged_iteration.png" />
+<img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/merge_iteration.png" />
 
 ### Iteration Combination
 
