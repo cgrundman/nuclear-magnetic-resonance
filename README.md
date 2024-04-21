@@ -26,15 +26,12 @@ From here, the signals are trimmed to only include the highlighted regions. The 
 
 ## Data Processing
 
-THe data processing step is broken down into 2 substeps: merge iteration and iteration combination.
-
-### Merge Iteration
+The collected NMR data must be processed to produce the NMR spectrum of the material sample. The data processing step is broken down into 2 substeps: merge iteration and iteration combination. Because the LF signal variance is less than the entire spectrum, the full spectrum needs a series of data collections.
 
 Merge iteration, as pictured below, is the process of using data collected from a common setting, and merging it to reduce noise from the data colection. The data was slices and saved as a single stream. This stream is resliced, and then the values averaged to smooth out errors.
 
 <img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/merge_iteration.png" />
 
-### Iteration Combination
-
+Iteration combination recieves the merged iterations and combines them. This process creates the full spectrum of NMR data. 
 
 ## Pattern Recognition
