@@ -45,13 +45,22 @@ def merge_iteration(NMR_signal, LF_signal):
     NMR_slices = np.zeros([n_slices, slice_size])
     LF_slices = np.zeros([n_slices, slice_size])
     for i in range(n_slices):
-        # for j in range(slice_size):
         NMR_slices[i,:] = NMR_signal[seperator_list[i]:seperator_list[i]+slice_size]
         LF_slices[i,:] = LF_signal[seperator_list[i]:seperator_list[i]+slice_size]
         
+    # Merge Slices
+    NMR_merged = np.zeros([np.shape(NMR_slices)[1]])
+    LF_merged = np.zeros([np.shape(LF_slices)[1]])
+    for data_point in range(np.shape(NMR_slices)[1]):
+        for slice in range(np.shape(NMR_slices)[0]):
+            NMR_merged[data_point] += NMR_slices[slice,data_point]
+            LF_merged[data_point] += LF_slices[slice,data_point]
+    NMR_merged = NMR_merged/5
+    LF_merged = LF_merged/5
 
-    print(np.shape(NMR_slices))
-    print(np.shape(LF_slices))
+    # Plot Slices
+    print(np.shape(NMR_merged))
+    print(np.shape(LF_merged))
 
 
 if __name__ == '__main__':
