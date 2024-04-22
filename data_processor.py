@@ -4,9 +4,11 @@ from matplotlib.gridspec import GridSpec
 import os
 
 
+# TODO correct single iteration to spectrum, test with higher setting data files
 # TODO Combine two nmr samples with different HF settings
 # TODO load all data 
 # TODO Create single nmr resonance data
+# TODO reshape NMR SPectrum
 def process_data(path):
 
     # Single data load
@@ -16,15 +18,19 @@ def process_data(path):
     # Extract hf_setting
     nmr_ile_string = "159947_nmr.txt"
     hf_setting = extract_decimal(nmr_ile_string)
-    print(hf_setting)
+    # print(hf_setting)
+
+    # Initialize empty NMR Spectrum
+    nmr_spectrum = np.zeros([2, 1200])
+    nmr_spectrum[0,:] = np.linspace(16, 20, num=1200)
 
     # Merge data from single iteration
     nmr_iteration, lf_iteration = merge_iteration(nmr, lf)
 
-    nmr_spectrum = np.zeros(1)
-    hf_setting = 0
-
     nmr_spectrum = iteration_combine(nmr_spectrum, nmr_iteration, lf_iteration, hf_setting)
+    
+    # Plot the spectrum
+    plot_spectrum(nmr_spectrum)
 
     return nmr_spectrum
 
@@ -89,12 +95,54 @@ def merge_iteration(NMR_signal, LF_signal):
     return NMR_merged, LF_merged
 
 
-# TODO make subspectrum range from LF signal and HF setting
-# TODO linearize the signal, define "blocks" of spectrum values
 # TODO combine two iterations based on x values
 # TODO trim or shape spectrum to a common range of frequencies (eg 16-20 MHz)
-def iteration_combine(Spectrum, NMR_iteration, LF_iteraiton, HF_setting):
+def iteration_combine(Spectrum, NMR_iteration, LF_iteration, HF_setting):
+
+    # Locate absolute position of iteration
+    LF_iteration = LF_iteration + HF_setting
+
+    # Find first close index pair
+    idx_spec, idx_lf = find_closest(LF_iteration, Spectrum[0,:])
+    # Test two closest spectrum points
+    diff = [abs(LF_iteration[idx_lf] - Spectrum[0,idx_spec]), 
+            abs(LF_iteration[idx_lf] - Spectrum[0,idx_spec+1])]
+    # Set the index to closest of the two
+    if diff[1] < diff[0]:
+        idx_spec += 1
+
+    # Set absolute postion of data within spectrum
+    LF_iteration = Spectrum[0,idx_spec:idx_spec+len(LF_iteration)]
+
+    # Insert NMR data into spectrum
+    for i in range(len(NMR_iteration)):
+        if 16 <= LF_iteration[i] <= 20:
+            if Spectrum[1,i] != 0:
+                Spectrum[1,i] = (Spectrum[1,i] + NMR_iteration[i])/2
+            else:
+                Spectrum[1,i] = NMR_iteration[i]
+
+    # for each data in iteration
+        # if iteration data within spectrum range
+            # if point at spectrum is occupied
+                # merge by averageing
+            # Elseif no data at point currently
+                # set point equal to current iteration value
+
+    print(np.max(LF_iteration))
+
     return Spectrum
+
+
+def find_closest(array, baseline):
+    
+    for value in array:
+        for value_baseline in baseline:
+            if abs(value - value_baseline) < 0.00336:
+                idx_spec = np.where(baseline==value_baseline)[0][0]
+                idx_lf = np.where(array==value)[0][0] 
+    
+                return idx_spec, idx_lf
 
 
 # TODO make a loop to reduce code length in sliced plots
@@ -199,6 +247,16 @@ def plot_merge_iteration(NMR_signal, NMR_slices, NMR_merged, LF_signal, LF_slice
 
     # Save and close plot
     plt.savefig(f"figures/merge_iteration.png")
+    plt.close()
+
+
+def plot_spectrum(Spectrum):
+    plt.style.use('dark_background')
+    fig = plt.figure(figsize=(10, 5))
+    plt.plot(Spectrum[0,:], Spectrum[1,:])
+    plt.grid(color='dimgrey')
+    plt.title("Spectrum")
+    plt.savefig(f"figures/spectrum.png")
     plt.close()
 
 # TODO save spectrum
