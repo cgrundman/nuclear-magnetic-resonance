@@ -4,7 +4,6 @@ from matplotlib.gridspec import GridSpec
 import os
 
 
-# TODO pull hf setting from file name
 # TODO Combine two nmr samples with different HF settings
 # TODO load all data 
 # TODO Create single nmr resonance data
@@ -13,6 +12,11 @@ def process_data(path):
     # Single data load
     nmr = np.loadtxt(path + "159947_nmr.txt")
     lf = np.loadtxt(path + "159947_lf.txt")
+
+    # Extract hf_setting
+    nmr_ile_string = "159947_nmr.txt"
+    hf_setting = extract_decimal(nmr_ile_string)
+    print(hf_setting)
 
     # Merge data from single iteration
     nmr_iteration, lf_iteration = merge_iteration(nmr, lf)
@@ -23,6 +27,25 @@ def process_data(path):
     nmr_spectrum = iteration_combine(nmr_spectrum, nmr_iteration, lf_iteration, hf_setting)
 
     return nmr_spectrum
+
+
+def extract_decimal(input_str):
+    # Initialize an empty string to store the numerical part
+    num_str = ""
+
+    # Iterate through the characters in the input string
+    for char in input_str:
+        # If the character is a digit or a decimal point, add it to num_str
+        if char.isdigit():
+            num_str += char
+
+    # Convert the extracted string to a decimal number
+    decimal_number = float(num_str)
+
+    # Scale number
+    decimal_number = decimal_number/10000
+
+    return decimal_number
 
 
 def merge_iteration(NMR_signal, LF_signal):
