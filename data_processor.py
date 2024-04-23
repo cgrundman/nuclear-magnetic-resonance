@@ -4,7 +4,6 @@ from matplotlib.gridspec import GridSpec
 import os
 
 
-# TODO correct single iteration to spectrum, test with higher setting data files
 # TODO load all data 
 # TODO Create single nmr resonance data
 # TODO reshape NMR SPectrum
@@ -14,47 +13,30 @@ def process_data(path):
     nmr_spectrum = np.zeros([2, 1200])
     nmr_spectrum[0,:] = np.linspace(16, 20, num=1200)
 
+    # Create list of files within path
+    files = []
+    for (dirpath, dirnames, filenames) in os.walk(path):
+        files.extend(filenames)
+        break
 
+    # Iterate trough files
+    for file in files:
 
-    ## First Iteration
+        print(file)
 
-    # Single data load
-    file_to_load = "163344.txt"
-    data_load = np.loadtxt(path + file_to_load)
-    
-    lf = data_load[0,:]
-    nmr = data_load[1,:]
+        # Load data
+        data_load = np.loadtxt(path + file)
+        lf = data_load[0,:]
+        nmr = data_load[1,:]
 
-    # Extract hf_setting
-    hf_setting = extract_decimal(file_to_load)
+        # Extract hf_setting
+        hf_setting = extract_decimal(file)
 
-    # Merge data from single iteration
-    nmr_iteration, lf_iteration = merge_iteration(nmr, lf)
+        # Merge data from single iteration
+        nmr_iteration, lf_iteration = merge_iteration(nmr, lf)
 
-    nmr_spectrum = iteration_combine(nmr_spectrum, nmr_iteration, lf_iteration, hf_setting)
+        nmr_spectrum = iteration_combine(nmr_spectrum, nmr_iteration, lf_iteration, hf_setting)
 
-
-
-    ## Second Iteration
-
-    # Single data load
-    file_to_load = "190056.txt"
-    data_load = np.loadtxt(path + file_to_load)
-    
-    lf = data_load[0,:]
-    nmr = data_load[1,:]
-
-    # Extract hf_setting
-    hf_setting = extract_decimal(file_to_load)
-
-    # Merge data from single iteration
-    nmr_iteration, lf_iteration = merge_iteration(nmr, lf)
-
-
-    nmr_spectrum = iteration_combine(nmr_spectrum, nmr_iteration, lf_iteration, hf_setting)
-
-
-    
     # Plot the spectrum
     plot_spectrum(nmr_spectrum)
 
@@ -121,8 +103,6 @@ def merge_iteration(NMR_signal, LF_signal):
     return NMR_merged, LF_merged
 
 
-# TODO combine two iterations based on x values
-# TODO trim or shape spectrum to a common range of frequencies (eg 16-20 MHz)
 # TODO Plot iteration_combine function
 def iteration_combine(Spectrum, NMR_iteration, LF_iteration, HF_setting):
 
@@ -144,18 +124,12 @@ def iteration_combine(Spectrum, NMR_iteration, LF_iteration, HF_setting):
 
     # Insert NMR data into spectrum
     for i in range(len(NMR_iteration)):
-        if 16 <= LF_iteration[idx_lf+i] <= 20:
-            if Spectrum[1,idx_spec+i] != 0:
-                Spectrum[1,idx_spec+i] = (Spectrum[1,idx_spec+i] + NMR_iteration[idx_lf+i])/2
-            else:
-                Spectrum[1,idx_spec+i] = NMR_iteration[i]
-
-    # for each data in iteration
-        # if iteration data within spectrum range
-            # if point at spectrum is occupied
-                # merge by averageing
-            # Elseif no data at point currently
-                # set point equal to current iteration value
+        if i < idx_lf-1:
+            if 16 <= LF_iteration[idx_lf+i] <= 20:
+                if Spectrum[1,idx_spec+i] != 0:
+                    Spectrum[1,idx_spec+i] = (Spectrum[1,idx_spec+i] + NMR_iteration[idx_lf+i])/2
+                else:
+                    Spectrum[1,idx_spec+i] = NMR_iteration[i]
 
     return Spectrum
 
