@@ -86,15 +86,17 @@ def save_signal(NMR, LF, set_point, name):
     if not os.path.exists(newpath):
         os.makedirs(newpath)
 
-    # Save signals to JSON
-    set_point = int(set_point*10000) 
-    np.savetxt(f"data/unprocessed_nmr_data/{name}/{set_point}_nmr.txt", NMR)
-    np.savetxt(f"data/unprocessed_nmr_data/{name}/{set_point}_lf.txt", LF)
+    # Save signals to single .txt
+    set_point = int(set_point*10000)
+    data = np.zeros([2, len(LF)])
+    data[0,:] = LF
+    data[1,:] = NMR
+    np.savetxt(f"data/unprocessed_nmr_data/{name}/{set_point}.txt", data)
 
 
 def sweep(material):
     # Looped Sweep
-    HF_setting = 16
+    HF_setting = 15.75
     iteration = 0
     while HF_setting <= 20:
 
@@ -116,6 +118,29 @@ def sweep(material):
 
         HF_setting += .03125
         iteration += 1
+
+
+# TODO provide more scientific explanation of random noise
+def randomization_noise_test():
+    for i in range(100):
+
+        n = i+1
+
+        data = np.random.random([100, n])
+        
+        plt_data = np.sum(data, axis=1)/n
+        std = np.std(plt_data)
+
+        plt.style.use('dark_background')
+        fig = plt.figure(figsize=(10, 5))
+        plt.plot(plt_data)
+        plt.grid(color='dimgrey')
+        plt.ylim([0,1])
+        plt.xlim([0,100])
+        plt.suptitle(f"Sample Size: {n}")
+        plt.title(f"Stardard Deviation: {std}")
+        plt.savefig(f"figures/randomization_tests/{n}.png")
+        plt.close()
 
 
 def plot_trimmed(time, NMR_signal, LF_signal, HF_setting, HF_actual):
@@ -241,6 +266,7 @@ def plot(time, NMR_signal, LF_signal, HF_setting, HF_actual):
     plt.close()
 
 
+# TODO find out how many iterations are needed to reduce random noise
 if __name__ == '__main__':
 
     # Create Material
@@ -278,8 +304,13 @@ if __name__ == '__main__':
         material_5
     ]
 
-    for material in materials:
-        name = material["Name"]
-        print(f"Simulating: {name}")
+    # # Sweep through all materials
+    # for material in materials:
+    #     name = material["Name"]
+    #     print(f"Simulating: {name}")
 
-        sweep(material)
+    #     sweep(material)
+
+    # Single sweep
+    sweep(material=materials[0])
+        
