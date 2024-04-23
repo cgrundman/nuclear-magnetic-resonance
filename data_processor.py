@@ -12,12 +12,14 @@ import os
 def process_data(path):
 
     # Single data load
-    nmr = np.loadtxt(path + "159947_nmr.txt")
-    lf = np.loadtxt(path + "159947_lf.txt")
+    file_to_load = "173059"
+    nmr_file = file_to_load + "_nmr.txt"
+    lf_file = file_to_load + "_lf.txt"
+    nmr = np.loadtxt(path + nmr_file)
+    lf = np.loadtxt(path + lf_file)
 
     # Extract hf_setting
-    nmr_ile_string = "159947_nmr.txt"
-    hf_setting = extract_decimal(nmr_ile_string)
+    hf_setting = extract_decimal(nmr_file)
     # print(hf_setting)
 
     # Initialize empty NMR Spectrum
@@ -104,6 +106,7 @@ def iteration_combine(Spectrum, NMR_iteration, LF_iteration, HF_setting):
 
     # Find first close index pair
     idx_spec, idx_lf = find_closest(LF_iteration, Spectrum[0,:])
+
     # Test two closest spectrum points
     diff = [abs(LF_iteration[idx_lf] - Spectrum[0,idx_spec]), 
             abs(LF_iteration[idx_lf] - Spectrum[0,idx_spec+1])]
@@ -116,11 +119,11 @@ def iteration_combine(Spectrum, NMR_iteration, LF_iteration, HF_setting):
 
     # Insert NMR data into spectrum
     for i in range(len(NMR_iteration)):
-        if 16 <= LF_iteration[i] <= 20:
-            if Spectrum[1,i] != 0:
-                Spectrum[1,i] = (Spectrum[1,i] + NMR_iteration[i])/2
+        if 16 <= LF_iteration[idx_lf+i] <= 20:
+            if Spectrum[1,idx_spec+i] != 0:
+                Spectrum[1,idx_spec+i] = (Spectrum[1,idx_spec+i] + NMR_iteration[idx_lf+i])/2
             else:
-                Spectrum[1,i] = NMR_iteration[i]
+                Spectrum[1,idx_spec+i] = NMR_iteration[i]
 
     # for each data in iteration
         # if iteration data within spectrum range
@@ -128,8 +131,6 @@ def iteration_combine(Spectrum, NMR_iteration, LF_iteration, HF_setting):
                 # merge by averageing
             # Elseif no data at point currently
                 # set point equal to current iteration value
-
-    print(np.max(LF_iteration))
 
     return Spectrum
 
