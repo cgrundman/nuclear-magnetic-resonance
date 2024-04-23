@@ -4,6 +4,7 @@ from matplotlib.gridspec import GridSpec
 import os
 
 
+# TODO reload new data shape
 # TODO correct single iteration to spectrum, test with higher setting data files
 # TODO Combine two nmr samples with different HF settings
 # TODO load all data 
@@ -12,14 +13,14 @@ import os
 def process_data(path):
 
     # Single data load
-    file_to_load = "173059"
-    nmr_file = file_to_load + "_nmr.txt"
-    lf_file = file_to_load + "_lf.txt"
-    nmr = np.loadtxt(path + nmr_file)
-    lf = np.loadtxt(path + lf_file)
+    file_to_load = "163344.txt"
+    data_load = np.loadtxt(path + file_to_load)
+    
+    lf = data_load[0,:]
+    nmr = data_load[1,:]
 
     # Extract hf_setting
-    hf_setting = extract_decimal(nmr_file)
+    hf_setting = extract_decimal(file_to_load)
     # print(hf_setting)
 
     # Initialize empty NMR Spectrum
@@ -99,6 +100,7 @@ def merge_iteration(NMR_signal, LF_signal):
 
 # TODO combine two iterations based on x values
 # TODO trim or shape spectrum to a common range of frequencies (eg 16-20 MHz)
+# TODO Plot iteration_combine function
 def iteration_combine(Spectrum, NMR_iteration, LF_iteration, HF_setting):
 
     # Locate absolute position of iteration
@@ -260,9 +262,10 @@ def plot_spectrum(Spectrum):
     plt.savefig(f"figures/spectrum.png")
     plt.close()
 
+
 # TODO save spectrum
 if __name__ == '__main__':
-    path = 'data/unprocessed_nmr_data/Material_5/'
+    path = 'data/unprocessed_nmr_data/Material_1/'
     directory = os.fsencode(path)
 
     nmr_spectrum = process_data(path)
