@@ -4,13 +4,19 @@ from matplotlib.gridspec import GridSpec
 import os
 
 
-# TODO reload new data shape
 # TODO correct single iteration to spectrum, test with higher setting data files
-# TODO Combine two nmr samples with different HF settings
 # TODO load all data 
 # TODO Create single nmr resonance data
 # TODO reshape NMR SPectrum
 def process_data(path):
+
+    # Initialize empty NMR Spectrum
+    nmr_spectrum = np.zeros([2, 1200])
+    nmr_spectrum[0,:] = np.linspace(16, 20, num=1200)
+
+
+
+    ## First Iteration
 
     # Single data load
     file_to_load = "163344.txt"
@@ -21,16 +27,33 @@ def process_data(path):
 
     # Extract hf_setting
     hf_setting = extract_decimal(file_to_load)
-    # print(hf_setting)
-
-    # Initialize empty NMR Spectrum
-    nmr_spectrum = np.zeros([2, 1200])
-    nmr_spectrum[0,:] = np.linspace(16, 20, num=1200)
 
     # Merge data from single iteration
     nmr_iteration, lf_iteration = merge_iteration(nmr, lf)
 
     nmr_spectrum = iteration_combine(nmr_spectrum, nmr_iteration, lf_iteration, hf_setting)
+
+
+
+    ## Second Iteration
+
+    # Single data load
+    file_to_load = "190056.txt"
+    data_load = np.loadtxt(path + file_to_load)
+    
+    lf = data_load[0,:]
+    nmr = data_load[1,:]
+
+    # Extract hf_setting
+    hf_setting = extract_decimal(file_to_load)
+
+    # Merge data from single iteration
+    nmr_iteration, lf_iteration = merge_iteration(nmr, lf)
+
+
+    nmr_spectrum = iteration_combine(nmr_spectrum, nmr_iteration, lf_iteration, hf_setting)
+
+
     
     # Plot the spectrum
     plot_spectrum(nmr_spectrum)
