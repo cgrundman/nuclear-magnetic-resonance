@@ -7,7 +7,7 @@ import os
 def process_data(path):
 
     # Initialize empty NMR Spectrum
-    nmr_spectrum = np.zeros([2, 1200])
+    nmr_spectrum = np.zeros([3, 1200])
     nmr_spectrum[0,:] = np.linspace(16, 20, num=1200)
 
     # Create list of files within path
@@ -16,6 +16,7 @@ def process_data(path):
         files.extend(filenames)
         break
 
+    counter = 1
     # Iterate trough files
     for file in files:
 
@@ -32,13 +33,15 @@ def process_data(path):
             # Merge data from single iteration
             nmr_iteration, lf_iteration = merge_iteration(nmr, lf)
 
+            nmr_iteration = nmr_iteration*(-1) + 4
+
             nmr_spectrum = iteration_combine(nmr_spectrum, nmr_iteration, lf_iteration, hf_setting)
 
             # Plot the spectrum
-            # plot_spectrum(nmr_spectrum)
+            plot_spectrum(nmr_spectrum, counter)
+            counter +=1
 
     nmr_spectrum[1,:] = nmr_spectrum[1,:]*(-1) + 4
-    plot_spectrum(nmr_spectrum)
 
     return nmr_spectrum
 
@@ -102,7 +105,7 @@ def merge_iteration(NMR_signal, LF_signal):
 
     return NMR_merged, LF_merged
 
-
+# TODO Create better averaging, equal weight of values
 # TODO Plot iteration_combine function
 def iteration_combine(Spectrum, NMR_iteration, LF_iteration, HF_setting):
 
@@ -128,21 +131,21 @@ def iteration_combine(Spectrum, NMR_iteration, LF_iteration, HF_setting):
     if idx_spec > len(Spectrum[0,:])-len(NMR_iteration) - 1:
         idx_end = len(NMR_iteration) - (len(Spectrum[0,:]) - idx_spec)
 
-    print(f"{len(NMR_iteration)} - ({len(Spectrum[0,:])} - {idx_spec})")
-    # print(f"idx_lfr: {idx_lf}")
-    # print(f"idx_spc: {idx_spec}")
-    print(f"idx_end: {idx_end}")
-
     # Set absolute postion of data within spectrum
     LF_iteration = Spectrum[0,idx_spec:idx_spec+len(LF_iteration)]
 
     # Insert NMR data into spectrum
     for i in range(len(NMR_iteration)-idx_lf-idx_end):
+        # Check for current index being within spectrum
         if 16 <= LF_iteration[idx_lf+i] <= 20:
+            # If value at index is nonzero
             if Spectrum[1,idx_spec+i] != 0:
-                Spectrum[1,idx_spec+i] = (Spectrum[1,idx_spec+i] + NMR_iteration[idx_lf+i])/2
+                Spectrum[1,idx_spec+i] = (Spectrum[1,idx_spec+i]*Spectrum[2,idx_spec+i] + NMR_iteration[idx_lf+i])/(Spectrum[2,idx_spec+i]+1)
+                Spectrum[2,idx_spec+i] += 1
+            # If value at index is zero
             else:
                 Spectrum[1,idx_spec+i] = NMR_iteration[i]
+                Spectrum[2,idx_spec+i] += 1
 
     return Spectrum
 
@@ -263,7 +266,7 @@ def plot_merge_iteration(NMR_signal, NMR_slices, NMR_merged, LF_signal, LF_slice
     plt.close()
 
 
-def plot_spectrum(Spectrum):
+def plot_spectrum(Spectrum, counter):
 
     plt.style.use('dark_background')
     fig = plt.figure(figsize=(10, 5))
@@ -272,7 +275,7 @@ def plot_spectrum(Spectrum):
     plt.title("Spectrum")
     plt.ylim([0,4])
     plt.xlim([16,20])
-    plt.savefig(f"figures/spectrum.png")
+    plt.savefig(f"figures/spec/spectrum_{counter}.png")
     plt.close()
 
 
