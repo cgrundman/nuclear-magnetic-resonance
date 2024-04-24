@@ -4,9 +4,6 @@ from matplotlib.gridspec import GridSpec
 import os
 
 
-# TODO load all data 
-# TODO Create single nmr resonance data
-# TODO reshape NMR SPectrum
 def process_data(path):
 
     # Initialize empty NMR Spectrum
@@ -20,9 +17,7 @@ def process_data(path):
         break
 
     # Iterate trough files
-    for i in range(len(files)):
-
-        file = files[i]
+    for file in files:
 
         # Load data
         data_load = np.loadtxt(path + file)
@@ -40,7 +35,10 @@ def process_data(path):
             nmr_spectrum = iteration_combine(nmr_spectrum, nmr_iteration, lf_iteration, hf_setting)
 
             # Plot the spectrum
-            plot_spectrum(nmr_spectrum, i)
+            # plot_spectrum(nmr_spectrum)
+
+    nmr_spectrum[1,:] = nmr_spectrum[1,:]*(-1) + 4
+    plot_spectrum(nmr_spectrum)
 
     return nmr_spectrum
 
@@ -265,7 +263,8 @@ def plot_merge_iteration(NMR_signal, NMR_slices, NMR_merged, LF_signal, LF_slice
     plt.close()
 
 
-def plot_spectrum(Spectrum, i):
+def plot_spectrum(Spectrum):
+
     plt.style.use('dark_background')
     fig = plt.figure(figsize=(10, 5))
     plt.plot(Spectrum[0,:], Spectrum[1,:])
@@ -273,7 +272,7 @@ def plot_spectrum(Spectrum, i):
     plt.title("Spectrum")
     plt.ylim([0,4])
     plt.xlim([16,20])
-    plt.savefig(f"figures/spectrum_build/spectrum_{i}.png")
+    plt.savefig(f"figures/spectrum.png")
     plt.close()
 
 
