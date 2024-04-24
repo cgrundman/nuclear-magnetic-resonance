@@ -16,7 +16,7 @@ def process_data(path):
         files.extend(filenames)
         break
 
-    counter = 1
+    # counter = 1
     # Iterate trough files
     for file in files:
 
@@ -38,12 +38,13 @@ def process_data(path):
             nmr_spectrum = iteration_combine(nmr_spectrum, nmr_iteration, lf_iteration, hf_setting)
 
             # Plot the spectrum
-            plot_spectrum(nmr_spectrum, counter)
-            counter +=1
+            # plot_spectrum(nmr_spectrum, counter)
+            # counter +=1
 
-    nmr_spectrum[1,:] = nmr_spectrum[1,:]*(-1) + 4
+    # Save Spectrum
+    save_spectrum(nmr_spectrum[1,:], name=path[26:-1])
 
-    return nmr_spectrum
+    return
 
 
 def extract_decimal(input_str):
@@ -105,8 +106,7 @@ def merge_iteration(NMR_signal, LF_signal):
 
     return NMR_merged, LF_merged
 
-# TODO Create better averaging, equal weight of values
-# TODO Plot iteration_combine function
+
 def iteration_combine(Spectrum, NMR_iteration, LF_iteration, HF_setting):
 
     # Locate absolute position of iteration
@@ -159,6 +159,17 @@ def find_closest(array, baseline):
                 idx_lf = np.where(array==value)[0][0] 
     
                 return idx_spec, idx_lf
+
+
+def save_spectrum(spectrum, name):
+
+    # Create save folder
+    newpath = f"data/processed_nmr_data/sample_1"
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
+
+    # Save signals to single .txt
+    np.savetxt(f"data/processed_nmr_data/sample_1/{name}.txt", spectrum)
 
 
 # TODO make a loop to reduce code length in sliced plots
@@ -279,9 +290,10 @@ def plot_spectrum(Spectrum, counter):
     plt.close()
 
 
-# TODO save spectrum
 if __name__ == '__main__':
     path = 'data/unprocessed_nmr_data/Material_1/'
     directory = os.fsencode(path)
 
-    nmr_spectrum = process_data(path)
+    process_data(path)
+
+
