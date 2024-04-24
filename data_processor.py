@@ -20,9 +20,9 @@ def process_data(path):
         break
 
     # Iterate trough files
-    for file in files:
+    for i in range(len(files)):
 
-        print(file)
+        file = files[i]
 
         # Load data
         data_load = np.loadtxt(path + file)
@@ -32,13 +32,15 @@ def process_data(path):
         # Extract hf_setting
         hf_setting = extract_decimal(file)
 
-        # Merge data from single iteration
-        nmr_iteration, lf_iteration = merge_iteration(nmr, lf)
+        if hf_setting < 19.9:
 
-        nmr_spectrum = iteration_combine(nmr_spectrum, nmr_iteration, lf_iteration, hf_setting)
+            # Merge data from single iteration
+            nmr_iteration, lf_iteration = merge_iteration(nmr, lf)
 
-    # Plot the spectrum
-    plot_spectrum(nmr_spectrum)
+            nmr_spectrum = iteration_combine(nmr_spectrum, nmr_iteration, lf_iteration, hf_setting)
+
+            # Plot the spectrum
+            plot_spectrum(nmr_spectrum, i)
 
     return nmr_spectrum
 
@@ -113,23 +115,36 @@ def iteration_combine(Spectrum, NMR_iteration, LF_iteration, HF_setting):
     idx_spec, idx_lf = find_closest(LF_iteration, Spectrum[0,:])
 
     # Test two closest spectrum points
-    diff = [abs(LF_iteration[idx_lf] - Spectrum[0,idx_spec]), 
-            abs(LF_iteration[idx_lf] - Spectrum[0,idx_spec+1])]
+    lower = abs(LF_iteration[idx_lf] - Spectrum[0,idx_spec])
+    if idx_spec+1 < 1200:
+        upper = abs(LF_iteration[idx_lf] - Spectrum[0,idx_spec+1])
+    else:
+        upper = 1
+    diff = [lower, upper]
+
     # Set the index to closest of the two
     if diff[1] < diff[0]:
         idx_spec += 1
+    # Number of values beyond Spec Range
+    idx_end = 0
+    if idx_spec > len(Spectrum[0,:])-len(NMR_iteration) - 1:
+        idx_end = len(NMR_iteration) - (len(Spectrum[0,:]) - idx_spec)
+
+    print(f"{len(NMR_iteration)} - ({len(Spectrum[0,:])} - {idx_spec})")
+    # print(f"idx_lfr: {idx_lf}")
+    # print(f"idx_spc: {idx_spec}")
+    print(f"idx_end: {idx_end}")
 
     # Set absolute postion of data within spectrum
     LF_iteration = Spectrum[0,idx_spec:idx_spec+len(LF_iteration)]
 
     # Insert NMR data into spectrum
-    for i in range(len(NMR_iteration)):
-        if i < idx_lf-1:
-            if 16 <= LF_iteration[idx_lf+i] <= 20:
-                if Spectrum[1,idx_spec+i] != 0:
-                    Spectrum[1,idx_spec+i] = (Spectrum[1,idx_spec+i] + NMR_iteration[idx_lf+i])/2
-                else:
-                    Spectrum[1,idx_spec+i] = NMR_iteration[i]
+    for i in range(len(NMR_iteration)-idx_lf-idx_end):
+        if 16 <= LF_iteration[idx_lf+i] <= 20:
+            if Spectrum[1,idx_spec+i] != 0:
+                Spectrum[1,idx_spec+i] = (Spectrum[1,idx_spec+i] + NMR_iteration[idx_lf+i])/2
+            else:
+                Spectrum[1,idx_spec+i] = NMR_iteration[i]
 
     return Spectrum
 
@@ -250,13 +265,15 @@ def plot_merge_iteration(NMR_signal, NMR_slices, NMR_merged, LF_signal, LF_slice
     plt.close()
 
 
-def plot_spectrum(Spectrum):
+def plot_spectrum(Spectrum, i):
     plt.style.use('dark_background')
     fig = plt.figure(figsize=(10, 5))
     plt.plot(Spectrum[0,:], Spectrum[1,:])
     plt.grid(color='dimgrey')
     plt.title("Spectrum")
-    plt.savefig(f"figures/spectrum.png")
+    plt.ylim([0,4])
+    plt.xlim([16,20])
+    plt.savefig(f"figures/spectrum_build/spectrum_{i}.png")
     plt.close()
 
 
@@ -266,21 +283,3 @@ if __name__ == '__main__':
     directory = os.fsencode(path)
 
     nmr_spectrum = process_data(path)
-
-    # # Iterate through NMR files
-    # for file in os.listdir(directory):
-    #     filename = os.fsdecode(file)
-    #     if filename.endswith("nmr.txt"):
-    #         # print(os.path.join(directory, filename))
-    #         print(filename)
-    #         continue
-
-    # # Iterate through LF files
-    # for file in os.listdir(directory):
-    #     filename = os.fsdecode(file)
-    #     if filename.endswith("lf.txt"):
-    #         # print(os.path.join(directory, filename))
-    #         print(filename)
-    #         continue
-
-    # nmr = np.loadtxt(path + "159938_nmr.txt")
