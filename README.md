@@ -32,6 +32,10 @@ Merge iteration, as pictured below, is the process of using data collected from 
 
 <img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/merge_iteration.png" />
 
-Iteration combination recieves the merged iterations and combines them. This process creates the full spectrum of NMR data. 
+Iteration combination recieves the merged iterations and adds them to the spectrum. The spectrum is initialized empty and value are added in a weighted manner, to reduce signal noise. This process creates the full spectrum of NMR data and is visualized below:
+
+<img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/spectrum.gif" />
+
+With the ability to create a full spectrum, the next task will be to reduce the data further and identify the material being sampled. This is done through a deep learning model in the next step.
 
 ## Pattern Recognition
