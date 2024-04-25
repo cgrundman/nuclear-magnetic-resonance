@@ -39,3 +39,5 @@ Iteration combination recieves the merged iterations and adds them to the spectr
 With the ability to create a full spectrum, the next task will be to reduce the data further and identify the material being sampled. This is done through a deep learning model in the next step.
 
 ## Pattern Recognition
+
+The next task is to take the now processed NMR data, and classify it into a material. This is done by exposing a neural network model to many examples and training it to guess the material.
