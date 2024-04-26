@@ -5,6 +5,7 @@ import random
 import os
 
 
+# TODO create full data set
 # TODO remove coefficients for peak decay, replace with automatic adjustment back to "normal"
 def generate_signal(material, HF_actual):
 

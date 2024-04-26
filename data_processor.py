@@ -4,6 +4,7 @@ from matplotlib.gridspec import GridSpec
 import os
 
 
+# TODO Create full dataset
 def process_data(path):
 
     # Initialize empty NMR Spectrum
