@@ -5,6 +5,7 @@ import os
 
 
 # TODO Create full dataset
+# TODO Host data on Kaggle or public source
 def process_data(path):
 
     # Initialize empty NMR Spectrum
@@ -291,10 +292,9 @@ def plot_spectrum(Spectrum, counter):
     plt.close()
 
 
+# TODO test format save sizes for file
 if __name__ == '__main__':
     path = 'data/unprocessed_nmr_data/Material_1/'
     directory = os.fsencode(path)
 
     process_data(path)
-
-
