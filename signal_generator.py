@@ -79,11 +79,10 @@ def trim_signal(time, NMR_signal, LF_signal):
     return time_trimmed, NMR_trimmed, LF_trimmed
 
 
-# TODO make unique IDs for folders
-def save_signal(NMR, LF, set_point, name):
+def save_signal(NMR, LF, set_point, name, id):
 
     # Create save folder
-    newpath = f"data/unprocessed_nmr_data/{name}"
+    newpath = f"data/unprocessed_nmr_data/{id}_{name}"
     if not os.path.exists(newpath):
         os.makedirs(newpath)
 
@@ -92,10 +91,10 @@ def save_signal(NMR, LF, set_point, name):
     data = np.zeros([2, len(LF)])
     data[0,:] = LF
     data[1,:] = NMR
-    np.savetxt(f"data/unprocessed_nmr_data/{name}/{set_point}.txt", data)
+    np.savetxt(f"data/unprocessed_nmr_data/{id}_{name}/{set_point}.txt", data)
 
 
-def sweep(material):
+def sweep(material, id):
     # Looped Sweep
     HF_setting = 15.75
     iteration = 0
@@ -115,7 +114,7 @@ def sweep(material):
         # Trim the signal for usable parts
         time_trimmed, NMR_trimmed, LF_trimmed = trim_signal(time, NMR_signal, LF_signal)
 
-        save_signal(NMR_trimmed, LF_trimmed, HF_actual, name=material["Name"])
+        save_signal(NMR_trimmed, LF_trimmed, HF_actual, name=material["Name"], id=id)
 
         HF_setting += .03125
         iteration += 1
@@ -267,7 +266,6 @@ def plot(time, NMR_signal, LF_signal, HF_setting, HF_actual):
     plt.close()
 
 
-# TODO find out how many iterations are needed to reduce random noise
 if __name__ == '__main__':
 
     # Create Material
@@ -305,13 +303,14 @@ if __name__ == '__main__':
         material_5
     ]
 
-    # # Sweep through all materials
-    # for material in materials:
-    #     name = material["Name"]
-    #     print(f"Simulating: {name}")
+    # Sweep through all materials
+    n_samples = 1
+    for material in materials:
+        name = material["Name"]
+        for i in range(n_samples):
 
-    #     sweep(material)
+            # Format ID
+            id = "{:04d}".format(i)
 
-    # Single sweep
-    sweep(material=materials[0])
-        
+            print(f"Simulating: {name}, ID: {id}")
+            sweep(material, id)        

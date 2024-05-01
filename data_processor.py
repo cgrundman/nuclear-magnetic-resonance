@@ -23,7 +23,7 @@ def process_data(path):
     for file in files:
 
         # Load data
-        data_load = np.loadtxt(path + file)
+        data_load = np.loadtxt(path + "/" + file)
         lf = data_load[0,:]
         nmr = data_load[1,:]
 
@@ -44,7 +44,7 @@ def process_data(path):
             # counter +=1
 
     # Save Spectrum
-    save_spectrum(nmr_spectrum[1,:], name=path[26:-1])
+    save_spectrum(nmr_spectrum[1,:], name=path[26:])
 
     return
 
@@ -166,12 +166,12 @@ def find_closest(array, baseline):
 def save_spectrum(spectrum, name):
 
     # Create save folder
-    newpath = f"data/processed_nmr_data/sample_1"
+    newpath = f"data/processed_nmr_data/"
     if not os.path.exists(newpath):
         os.makedirs(newpath)
 
     # Save signals to single .txt
-    np.savetxt(f"data/processed_nmr_data/sample_1/{name}.txt", spectrum)
+    np.savetxt(f"data/processed_nmr_data/{name}.txt", spectrum)
 
 
 # TODO make a loop to reduce code length in sliced plots
@@ -292,9 +292,17 @@ def plot_spectrum(Spectrum, counter):
     plt.close()
 
 
-# TODO test format save sizes for file
 if __name__ == '__main__':
-    path = 'data/unprocessed_nmr_data/Material_1/'
-    directory = os.fsencode(path)
 
-    process_data(path)
+    path = 'data/unprocessed_nmr_data/'
+    
+    dir_list = []
+    for subdir in os.walk(path):
+        
+        dir_list += [subdir[0]]
+
+
+    for subdir in dir_list[1:]:
+
+        print(f"Processing: {subdir[26:]}")
+        process_data(subdir)
