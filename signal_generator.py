@@ -304,7 +304,7 @@ if __name__ == '__main__':
     ]
 
     # Sweep through all materials
-    n_samples = 1
+    n_samples = 2000
     for material in materials:
         name = material["Name"]
         for i in range(n_samples):
