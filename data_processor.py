@@ -174,7 +174,6 @@ def save_spectrum(spectrum, name):
     np.savetxt(f"data/processed_nmr_data/{name}.txt", spectrum)
 
 
-# TODO make a loop to reduce code length in sliced plots
 def plot_merge_iteration(NMR_signal, NMR_slices, NMR_merged, LF_signal, LF_slices, LF_merged):
     
     # Define number of slices
@@ -201,64 +200,35 @@ def plot_merge_iteration(NMR_signal, NMR_slices, NMR_merged, LF_signal, LF_slice
     ax1.set_xticklabels([])
     ax1.set_yticklabels([])
 
-    # Data Slices
+    # Data Slices - NMR Data
     ax4 = fig.add_subplot(gs[2,0])
-    ax4.plot(NMR_slices[0,:], color='lightcoral')
-    ax4.grid(color='dimgrey')
-    ax4.set_xticklabels([])
-    ax4.set_yticklabels([])
-    ax4.set_ylim((.9, 4.1))
     ax5 = fig.add_subplot(gs[2,1])
-    ax5.plot(NMR_slices[1,:], color='lightcoral')
-    ax5.grid(color='dimgrey')
-    ax5.set_xticklabels([])
-    ax5.set_yticklabels([])
-    ax5.set_ylim((.9, 4.1))
     ax6 = fig.add_subplot(gs[2,2])
-    ax6.plot(NMR_slices[2,:], color='lightcoral')
-    ax6.grid(color='dimgrey')
-    ax6.set_xticklabels([])
-    ax6.set_yticklabels([])
-    ax6.set_ylim((.9, 4.1))
     ax7 = fig.add_subplot(gs[2,3])
-    ax7.plot(NMR_slices[3,:], color='lightcoral')
-    ax7.grid(color='dimgrey')
-    ax7.set_xticklabels([])
-    ax7.set_yticklabels([])
-    ax7.set_ylim((.9, 4.1))
     ax8 = fig.add_subplot(gs[2,4])
-    ax8.plot(NMR_slices[4,:], color='lightcoral')
-    ax8.grid(color='dimgrey')
-    ax8.set_xticklabels([])
-    ax8.set_yticklabels([])
-    ax8.set_ylim((.9, 4.1))
+    ax_list = [ax4, ax5, ax6, ax7, ax8]
+    for i in range(len(ax_list)):
+        ax = ax_list[i]
+        ax.plot(NMR_slices[i,:], color='lightcoral')
+        ax.grid(color='dimgrey')
+        ax.set_xticklabels([])
+        ax.set_yticklabels([])
+        ax.set_ylim((.9, 4.1))
     ax6.set_title("Sliced Data")
 
+    # Data Slices - LF Data
     ax9 = fig.add_subplot(gs[3,0])
-    ax9.plot(LF_slices[0,:], color='deepskyblue')
-    ax9.grid(color='dimgrey')
-    ax9.set_xticklabels([])
-    ax9.set_yticklabels([])
     ax10 = fig.add_subplot(gs[3,1])
-    ax10.plot(LF_slices[1,:], color='deepskyblue')
-    ax10.grid(color='dimgrey')
-    ax10.set_xticklabels([])
-    ax10.set_yticklabels([])
     ax11 = fig.add_subplot(gs[3,2])
-    ax11.plot(LF_slices[2,:], color='deepskyblue')
-    ax11.grid(color='dimgrey')
-    ax11.set_xticklabels([])
-    ax11.set_yticklabels([])
     ax12 = fig.add_subplot(gs[3,3])
-    ax12.plot(LF_slices[3,:], color='deepskyblue')
-    ax12.grid(color='dimgrey')
-    ax12.set_xticklabels([])
-    ax12.set_yticklabels([])
     ax13 = fig.add_subplot(gs[3,4])
-    ax13.plot(LF_slices[4,:], color='deepskyblue')
-    ax13.grid(color='dimgrey')
-    ax13.set_xticklabels([])
-    ax13.set_yticklabels([])
+    ax_list = [ax9, ax10, ax11, ax12, ax13]
+    for i in range(len(ax_list)):
+        ax = ax_list[i]
+        ax.plot(LF_slices[0,:], color='deepskyblue')
+        ax.grid(color='dimgrey')
+        ax.set_xticklabels([])
+        ax.set_yticklabels([])
 
     # Merged Data
     ax2 = fig.add_subplot(gs[4,1:-1])
