@@ -5,7 +5,6 @@ import random
 import os
 
 
-# TODO create full data set
 # TODO remove coefficients for peak decay, replace with automatic adjustment back to "normal"
 def generate_signal(material, HF_actual):
 
@@ -304,7 +303,8 @@ if __name__ == '__main__':
     ]
 
     # Sweep through all materials
-    n_samples = 2000
+    # n_samples = 2000 # full dataset
+    n_samples = 1 # small dataset
     for material in materials:
         name = material["Name"]
         for i in range(n_samples):

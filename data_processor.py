@@ -4,8 +4,6 @@ from matplotlib.gridspec import GridSpec
 import os
 
 
-# TODO Create full dataset
-# TODO Host data on Kaggle or public source
 def process_data(path):
 
     # Initialize empty NMR Spectrum
