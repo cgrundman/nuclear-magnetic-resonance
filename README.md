@@ -1,4 +1,4 @@
-# NMR Signal
+# Nuclear Magnetic Resonance
 
 NMR spectroscopy is a non-destructive method for material identification. It is a unique process that may become very prevelent in the future in diagnostics and material analysis. The current state-of-the-art machines are expensive and in high demand. Therefor NMR Data is difficult to come by.
 
