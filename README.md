@@ -48,4 +48,6 @@ This mathematical model is developed using machine learning. While this is a ver
 
 As disclosure, the model will be devoloped in Google Colab, a jupyter notebook environment that is easily accessible (at the moment at least). This allows for a more simple setup than a local installation of machine learning libraries. TensorFlow will be used for the model creation. For the technical machine learning algorithms and documentation, please refer to the Colab page, as it contains notebook documentaiton. 
 
+Three model architectures were tested for this task: a [neural network](https://www.ibm.com/topics/neural-networks) (think of this as very basic), a [recurrent neural network (RNN)](https://www.ibm.com/topics/recurrent-neural-networks), and a [Long-Short Term Memory (LSTM)](https://medium.com/@ottaviocalzone/an-intuitive-explanation-of-lstm-a035eb6ab42c) Model. These all have success in tasks involving sequetial data. 
+
 
