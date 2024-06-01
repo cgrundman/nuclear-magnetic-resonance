@@ -1,10 +1,10 @@
 # Nuclear Magnetic Resonance
 
-NMR spectroscopy is a non-destructive method for material identification. It is a unique process that may become very prevelent in the future in diagnostics and material analysis. The current state-of-the-art machines are expensive and in high demand. Therefor NMR Data is difficult to come by.
+NMR spectroscopy is a non-destructive method for material identification. The current state-of-the-art machines are expensive and in high demand. Therefor NMR Data is difficult to come by.
 
-This repository is meant to serve as a supplement to NMR fundamentals, more specifically Continuous Wave (CW) NMR. This repo contains code for generating an NMR signal, processing the raw signal into tradition NMR data, and then showing how pattern recognition can be performed on the generated data.
+The information in this repository is meant to serve as a supplement to Continuous Wave Nuclear Magnetic Resonanse (CW-NMR). This repo contains code for generating an NMR signal, processing the raw signal into tradition NMR data, and implementing pattern recognition on the generated data.
 
-To note, most NMR resources will show Fourier Transform (FT) NMR. And there are even further many types of producing material data, incuding multidimensional arrays. FT NMR is important, as it allows much much faster material analysis using one of the most important algorithms of the 20th century: the Fourier Transform. This data set is for simple 1D data, and will showcase CW NMR, though I hope to add sections of FT NMr at a later time. 
+To note, most NMR resources will show Fourier Transform (FT) NMR or one of its offshoots. FT-NMR is more relevent, as it allows much much faster material analysis and is basically all of the technology used for lab-ready NMR devices. This data set is for simple 1D data, and will showcase CW-NMR, though I hope to add sections of FT-NMR at a later time. 
 
 There are three main components discussed below: Signal Generation, Data Processing, and Pattern Recognition.
 
