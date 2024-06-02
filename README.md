@@ -10,15 +10,15 @@ There are three main components discussed below: Signal Generation, Data Process
 
 ## 1. Signal Generation
 
-The following gif shows a full sweep through the full range of high frequency.
+CW-NMR can only "see" part of the the resonance spectrum at any given iteration. The device must be iterated through a sweep of resonance ranges to produce a spectrum. The following gif shows a full sweep through the full range of high frequency.
 
 <img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/full_sweep.gif" />
 
-The simulated full data is seen below:
+A single iterstion is seen below:
 
 <img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/full_data_iteration.png" />
 
-The useful data ranges lie in the same data ranges. Because of error in the measurement, several samples are needed to reconstruct the signal. The valid ranges are where the rate of the low frequncy signal is 1) essentially flat and 2) increasing. It is important to only select the increasing rate regions, becuase the resonance happens differently depending on whether the low frequency signal is increasing or decreasing. These regions are highlighed in yellow below: 
+The useful data ranges lie in the same data ranges. Because of signal noise, several samples are needed in a single iteration to reconstruct the signal. The valid ranges are where the rate of the low frequncy signal is 1) essentially flat and 2) increasing. It is important to only select the increasing rate regions, becuase the resonance happens differently depending on whether the low frequency signal is increasing or decreasing. These regions are highlighed in yellow below: 
 
 <img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/highlighted_data.png" />
 
