@@ -22,7 +22,7 @@ The useful data ranges lie in the same data ranges. Because of signal noise, sev
 
 <img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/highlighted_data.png" />
 
-From here, the signals are trimmed to only include the highlighted regions. The trimmed data is then saved to have preprocessed later. After trimming, the raw NMR data appears as below:
+From here, the signals are trimmed to only include regions of more or less linearity within the low feequency signal, highlighted in yellow. The trimmed data is then saved to have preprocessed later. After trimming, the raw NMR data appears as below:
 
 <img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/trimmed_data.png" />
 
