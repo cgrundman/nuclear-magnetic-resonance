@@ -313,4 +313,4 @@ if __name__ == '__main__':
             id = "{:04d}".format(i)
 
             print(f"Simulating: {name}, ID: {id}")
-            sweep(material, id)        
+            # sweep(material, id)        
