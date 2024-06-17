@@ -50,6 +50,12 @@ As disclosure, the model will be devoloped in Google Colab, a jupyter notebook e
 
 Another important note is that this method is used, because geound truth data in the real world os note available.
 
-Three model architectures were tested for this task: a [neural network](https://www.ibm.com/topics/neural-networks) (think of this as very basic), a [recurrent neural network (RNN)](https://www.ibm.com/topics/recurrent-neural-networks), and a [Long-Short Term Memory (LSTM)](https://medium.com/@ottaviocalzone/an-intuitive-explanation-of-lstm-a035eb6ab42c) Model. These all have success in tasks involving sequetial data. 
+Three model architectures were selected for this task: a [neural network](https://www.ibm.com/topics/neural-networks) (think of this as very basic), a [recurrent neural network (RNN)](https://www.ibm.com/topics/recurrent-neural-networks), and a [Long-Short Term Memory (LSTM)](https://medium.com/@ottaviocalzone/an-intuitive-explanation-of-lstm-a035eb6ab42c) Model. These all have success in tasks involving sequetial data.
 
+In the end, the simple NN was able to classify with near 100% accuracy. The RNN was unable to get accuracy better than random guesses. It is theorized that the architecture was too complicated for this application. The LSTM was not tested as the NN had the desired results and is much smaller than the other two models. The model trainings can be seen compared below:
 
+<img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/comp_NN_RNN .png" />
+
+The following is the performance of the model. As seen in the example the model has near 100% accuracy.
+
+<img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/model_demo.png" />
