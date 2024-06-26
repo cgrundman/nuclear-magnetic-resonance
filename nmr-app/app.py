@@ -12,34 +12,37 @@ root.configure(bg='#4c4c4c')
 
 font_size = 12
 
-# frame_1 = tk.Frame(root, highlightbackground="black", highlightthickness=2)
-# frame_1.grid(row=0, column=0, columnspan=2)
-label1 = tk.Label(root, text="Frame 1", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=60, height=10)
+# HF Setting
+label1 = tk.Label(root, text="HF Setting", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=60, height=10)
 label1.grid(row=0, column=0, columnspan=2)
 
-# frame_2 = tk.Frame(root, highlightbackground="black", highlightthickness=2)
-# frame_2.pack(side=tk.TOP)
-label2 = tk.Label(root, text="Frame 2", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=60, height=10)
+# LF Setting
+label2 = tk.Label(root, text="LF Setting", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=60, height=10)
 label2.grid(row=0, column=3, columnspan=2)
 
-# frame_3 = tk.Frame(root, highlightbackground="black", highlightthickness=2)
-# frame_3.pack()
-label3 = tk.Label(root, text="Frame 3", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=150, height=10)
+# NMR Signal
+label3 = tk.Label(root, text="NMR Signal", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=150, height=10)
 label3.grid(row=1, column=0, columnspan=5)
 
-# frame_4 = tk.Frame(root, highlightbackground="black", highlightthickness=2)
-# frame_4.pack()
-label4 = tk.Label(root, text="Frame 4", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=150, height=10)
+# NMR SPectrum
+label4 = tk.Label(root, text="NMR Spectrum", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=150, height=10)
 label4.grid(row=2, column=0, columnspan=5)
 
-label5 = tk.Label(root, text="Frame 5", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=90, height=10)
+# Pattern Recognition
+label5 = tk.Label(root, text="Patern Recognition", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=90, height=10)
 label5.grid(row=3, column=0, columnspan=3)
 
-label6 = tk.Label(root, text="Frame 6", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=30, height=10)
+# Run application
+label6 = tk.Label(root, text="Run", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=30, height=10)
 label6.grid(row=3, column=3)
 
-label7 = tk.Label(root, text="Frame 7", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=30, height=10)
+# Close Application
+label7 = tk.Label(root, text="Close", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=30, height=10)
 label7.grid(row=3, column=4)
+
+# Material Selection
+label8 = tk.Label(root, text="Material Selection", wraplength=1, font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=30, height=40)
+label8.grid(row=0, rowspan=4, column=5)
 
 # # Create a frame for the buttons
 # button_frame = tk.Frame(root, bg='#4c4c4c', highlightbackground="black", highlightthickness=1)
