@@ -39,6 +39,8 @@ label6.grid(row=3, column=3)
 # Close Application
 label7 = tk.Label(root, text="Close", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=30, height=10)
 label7.grid(row=3, column=4)
+close_button = ttk.Button(label7, text="Close", command=root.destroy, style='Red.TButton')
+close_button.grid()
 
 # Material Selection
 label8 = tk.Label(root, text="Material Selection", wraplength=1, font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=30, height=40)
