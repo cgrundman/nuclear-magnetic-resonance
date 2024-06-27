@@ -6,20 +6,55 @@ from matplotlib.figure import Figure
 from nmr_signal import nmr_signal_generator
 
 
+# Materials
+material_1 = {
+    'Name': "Material_1",
+    'Resonances': [16.5, 18, 19.1],
+    'Peaks': [1, 2, 1]
+}
+material_2 = {
+    'Name': "Material_2",
+    'Resonances': [17],
+    'Peaks': [1]
+}
+material_3 = {
+    'Name': "Material_3",
+    'Resonances': [18.4],
+    'Peaks': [3]
+}
+material_4 = {
+    'Name': "Material_4",
+    'Resonances': [16.8, 18.9],
+    'Peaks': [1, 3]
+}
+material_5 = {
+    'Name': "Material_5",
+    'Resonances': [16.2, 17.5],
+    'Peaks': [1, 1]
+}
+
+materials = [
+    material_1, 
+    material_2, 
+    material_3, 
+    material_4, 
+    material_5
+]
+
 root = tk.Tk()
 root.title("Tkinter App with Plots")
-# frame = tk.Frame(root)
-# frame.pack()
 root.configure(bg='#4c4c4c')
 
 font_size = 12
+bg_color = '#4c4c4c'
+plot_color = '#7f7f7f'
 
 # HF Setting
-label1 = tk.Label(root, text="HF Setting", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=60, height=10)
+label1 = tk.Label(root, text="HF Setting", font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=60, height=10)
 label1.grid(row=0, column=0, columnspan=2)
 
 # LF Setting
-label2 = tk.Label(root, text="LF Setting", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=60, height=10)
+label2 = tk.Label(root, text="LF Setting", font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=60, height=10)
 label2.grid(row=0, column=3, columnspan=2)
 
 # NMR Signal
@@ -27,17 +62,20 @@ frame3 = ttk.Frame(root)
 frame3.grid(row=1, column=0, columnspan=5)
 
 # Create NMR Signal
-x, lf_signal, nmr_signal = nmr_signal_generator()
+x, lf_signal, nmr_signal = nmr_signal_generator(material=materials[4], 
+                                                HF_actual=16.0000)
 
 # Create a Matplotlib figure
 fig = Figure(figsize=(13.5, 2), dpi=100)
+fig.patch.set_facecolor('#4c4c4c')
 fig.tight_layout()
 plot = fig.add_subplot(111)
-plot.plot(x, lf_signal)
+plot.plot(x, lf_signal*3 + 0.5)
 plot.plot(x, nmr_signal)
 plot.set_xlim([x[0], x[-1]])
 plot.set_ylim([0, 4])
 plot.set_ylabel("NMR Signal")
+plot.set_facecolor(plot_color)
 plot.grid(True)
 
 # Embed the plot in the Tkinter frame
@@ -46,40 +84,28 @@ canvas.draw()
 canvas.get_tk_widget().grid(row=0, column=0)
 
 # NMR SPectrum
-label4 = tk.Label(root, text="NMR Spectrum", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=150, height=10)
+label4 = tk.Label(root, text="NMR Spectrum", font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=150, height=10)
 label4.grid(row=2, column=0, columnspan=5)
 
 # Pattern Recognition
-label5 = tk.Label(root, text="Patern Recognition", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=90, height=10)
+label5 = tk.Label(root, text="Patern Recognition", font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=90, height=10)
 label5.grid(row=3, column=0, columnspan=3)
 
 # Run application
-label6 = tk.Label(root, text="Run", font=('Helvetica', font_size), bg='#4c4c4c', width=30, height=10)
+label6 = tk.Label(root, text="Run", font=('Helvetica', font_size), bg=bg_color, width=30, height=10)
 label6.grid(row=3, column=3)
 run_button = ttk.Button(label6, text="Run", command=root.destroy, style='Red.TButton')
 run_button.grid()
 
 # Close Application
-label7 = tk.Label(root, text="Close", font=('Helvetica', font_size), bg='#4c4c4c', width=30, height=10)
+label7 = tk.Label(root, text="Close", font=('Helvetica', font_size), bg=bg_color, width=30, height=10)
 label7.grid(row=3, column=4)
 close_button = ttk.Button(label7, text="Close", command=root.destroy, style='Red.TButton')
 close_button.grid()
 
 # Material Selection
-label8 = tk.Label(root, text="Material Selection", wraplength=1, font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=30, height=40)
+label8 = tk.Label(root, text="Material Selection", wraplength=1, font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=30, height=40)
 label8.grid(row=0, rowspan=4, column=5)
-
-# # Create a frame for the buttons
-# button_frame = tk.Frame(root, bg='#4c4c4c', highlightbackground="black", highlightthickness=1)
-# button_frame.pack(side=tk.BOTTOM, fill=tk.X, pady=10)
-
-# # Button to create the plots
-# plot_button = ttk.Button(button_frame, text="Plot Data", command=create_plots(), style='Blue.TButton')
-# plot_button.pack(side=tk.LEFT, padx=10)
-
-# # Button to close the application
-# close_button = ttk.Button(button_frame, text="Close", command=root.destroy, style='Red.TButton')
-# close_button.pack(side=tk.RIGHT, padx=10)
 
 # # Create the main Tkinter window
 # root = tk.Tk()
@@ -200,9 +226,5 @@ label8.grid(row=0, rowspan=4, column=5)
 # # Button to create the plots
 # plot_button = ttk.Button(button_frame, text="Plot Data", command=create_plots(), style='Blue.TButton')
 # plot_button.pack(side=tk.LEFT, padx=10)
-
-# # Button to close the application
-# close_button = ttk.Button(button_frame, text="Close", command=root.destroy, style='Red.TButton')
-# close_button.pack(side=tk.RIGHT, padx=10)
 
 root.mainloop()
