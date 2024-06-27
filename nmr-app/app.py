@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-import numpy as np
 
 from nmr_signal import nmr_signal_generator
 
@@ -36,12 +35,9 @@ fig.tight_layout()
 plot = fig.add_subplot(111)
 plot.plot(x, lf_signal)
 plot.plot(x, nmr_signal)
-# plot.set_title(title)
 plot.set_xlim([x[0], x[-1]])
 plot.set_ylim([0, 4])
 plot.set_ylabel("NMR Signal")
-# plot.set_yticklabels([])
-# plot.set_xticklabels([])
 plot.grid(True)
 
 # Embed the plot in the Tkinter frame
@@ -58,11 +54,13 @@ label5 = tk.Label(root, text="Patern Recognition", font=('Helvetica', font_size)
 label5.grid(row=3, column=0, columnspan=3)
 
 # Run application
-label6 = tk.Label(root, text="Run", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=30, height=10)
+label6 = tk.Label(root, text="Run", font=('Helvetica', font_size), bg='#4c4c4c', width=30, height=10)
 label6.grid(row=3, column=3)
+run_button = ttk.Button(label6, text="Run", command=root.destroy, style='Red.TButton')
+run_button.grid()
 
 # Close Application
-label7 = tk.Label(root, text="Close", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=30, height=10)
+label7 = tk.Label(root, text="Close", font=('Helvetica', font_size), bg='#4c4c4c', width=30, height=10)
 label7.grid(row=3, column=4)
 close_button = ttk.Button(label7, text="Close", command=root.destroy, style='Red.TButton')
 close_button.grid()
