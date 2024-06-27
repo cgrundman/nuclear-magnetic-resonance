@@ -47,5 +47,6 @@ def nmr_signal_generator(material, HF_actual):
                 elif resonance - .02 < lf_signal[n] + HF_actual < resonance + .02:
                     nmr_signal[n] = random.random()/10 + 1.5 + 50*abs((resonance-HF_actual)-(lf_signal[n]))
 
+    lf_signal = lf_signal*3 + 0.5
 
     return data_points, lf_signal, nmr_signal

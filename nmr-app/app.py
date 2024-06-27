@@ -2,8 +2,10 @@ import tkinter as tk
 from tkinter import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+import numpy as np
 
 from nmr_signal import nmr_signal_generator
+from plot import plot
 
 
 # Materials
@@ -47,7 +49,6 @@ root.configure(bg='#4c4c4c')
 
 font_size = 12
 bg_color = '#4c4c4c'
-plot_color = '#7f7f7f'
 
 # HF Setting
 label1 = tk.Label(root, text="HF Setting", font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=60, height=10)
@@ -60,32 +61,28 @@ label2.grid(row=0, column=3, columnspan=2)
 # NMR Signal
 frame3 = ttk.Frame(root)
 frame3.grid(row=1, column=0, columnspan=5)
-
 # Create NMR Signal
-x, lf_signal, nmr_signal = nmr_signal_generator(material=materials[4], 
-                                                HF_actual=16.0000)
-
-# Create a Matplotlib figure
-fig = Figure(figsize=(13.5, 2), dpi=100)
-fig.patch.set_facecolor('#4c4c4c')
-fig.tight_layout()
-plot = fig.add_subplot(111)
-plot.plot(x, lf_signal*3 + 0.5)
-plot.plot(x, nmr_signal)
-plot.set_xlim([x[0], x[-1]])
-plot.set_ylim([0, 4])
-plot.set_ylabel("NMR Signal")
-plot.set_facecolor(plot_color)
-plot.grid(True)
-
+x, lf_signal, nmr_signal = nmr_signal_generator(material=materials[4], HF_actual=16.0000)
+# Plot NMR Signal
+fig = plot(name="NMR Signal", x=x, y=[lf_signal, nmr_signal], plot_rgb=["#f01d51", "#1d78f0"])
 # Embed the plot in the Tkinter frame
 canvas = FigureCanvasTkAgg(fig, master=frame3)
 canvas.draw()
 canvas.get_tk_widget().grid(row=0, column=0)
 
 # NMR SPectrum
-label4 = tk.Label(root, text="NMR Spectrum", font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=150, height=10)
-label4.grid(row=2, column=0, columnspan=5)
+frame4 = tk.Frame(root)
+frame4.grid(row=2, column=0, columnspan=5)
+# Create NMR Spectrum
+x = np.linspace(16, 20, 1200)
+lf = np.random.rand(len(x))
+nmr_spectrum = np.zeros(len(x))
+# Plot NMR Spectrum
+fig2 = plot(name="NMR Spectrum", x=x, y=[nmr_spectrum], plot_rgb=["#2cde5c"])
+# Embed the plot in the Tkinter frame
+canvas = FigureCanvasTkAgg(fig2, master=frame4)
+canvas.draw()
+canvas.get_tk_widget().grid(row=0, column=0)
 
 # Pattern Recognition
 label5 = tk.Label(root, text="Patern Recognition", font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=90, height=10)
