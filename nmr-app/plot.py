@@ -17,3 +17,20 @@ def plot(name, x, y, plot_rgb):
     plot.grid(True)
 
     return fig
+
+
+def bar(name, x, y):
+    # Create a Matplotlib figure
+    material_guess = np.argmax(y) + 1
+    fig = Figure(figsize=(7, 2), dpi=100)
+    fig.patch.set_facecolor('#4c4c4c')
+    fig.tight_layout()
+    plot = fig.add_subplot(111)
+    plot.bar(x, y, width=1, edgecolor="#000000")
+    plot.set_xlim([0.4, 5.6])
+    plot.set_ylim([0, 1])
+    plot.set_title(f"Guess: Material {material_guess}", x=1.3, y=0.5)
+    plot.set_facecolor('#7f7f7f')
+    # plot.grid(True)
+    
+    return fig

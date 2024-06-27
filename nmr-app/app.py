@@ -5,7 +5,7 @@ from matplotlib.figure import Figure
 import numpy as np
 
 from nmr_signal import nmr_signal_generator
-from plot import plot
+from plot import plot, bar
 
 
 # Materials
@@ -50,12 +50,15 @@ root.configure(bg='#4c4c4c')
 font_size = 12
 bg_color = '#4c4c4c'
 
+HF_setting = 16.0000
+LF_setting = 27
+
 # HF Setting
-label1 = tk.Label(root, text="HF Setting", font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=60, height=10)
+label1 = tk.Label(root, text=f"HF Seeting: {HF_setting:.4f}MHz", font=('Courier', 36), bg=bg_color)
 label1.grid(row=0, column=0, columnspan=2)
 
 # LF Setting
-label2 = tk.Label(root, text="LF Setting", font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=60, height=10)
+label2 = tk.Label(root, text=f"LF Setting: {LF_setting}Hz", font=('Courier', 36), bg=bg_color)
 label2.grid(row=0, column=3, columnspan=2)
 
 # NMR Signal
@@ -85,20 +88,26 @@ canvas.draw()
 canvas.get_tk_widget().grid(row=0, column=0)
 
 # Pattern Recognition
-label5 = tk.Label(root, text="Patern Recognition", font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=90, height=10)
-label5.grid(row=3, column=0, columnspan=3)
+frame5 = tk.Frame(root)
+frame5.grid(row=3, column=0, columnspan=3)
+x = [1, 2, 3, 4, 5]
+pattern_rec = np.random.rand(5)
+fig3 = bar(name="Pattern Recognition", x=x, y=pattern_rec)
+canvas = FigureCanvasTkAgg(fig3, master=frame5)
+canvas.draw()
+canvas.get_tk_widget().grid(row=0, column=0)
 
-# Run application
-label6 = tk.Label(root, text="Run", font=('Helvetica', font_size), bg=bg_color, width=30, height=10)
+# Material Guess
+label6 = tk.Label(root, text=f"Guess: Material {np.argmax(pattern_rec) + 1}", font=('Helvetica', 25), bg=bg_color)#, width=30, height=10)
 label6.grid(row=3, column=3)
-run_button = ttk.Button(label6, text="Run", command=root.destroy, style='Red.TButton')
-run_button.grid()
 
 # Close Application
 label7 = tk.Label(root, text="Close", font=('Helvetica', font_size), bg=bg_color, width=30, height=10)
 label7.grid(row=3, column=4)
+run_button = ttk.Button(label7, text="Run", command=root.destroy, style='Red.TButton')
+run_button.grid(ipady=10, ipadx=10)
 close_button = ttk.Button(label7, text="Close", command=root.destroy, style='Red.TButton')
-close_button.grid()
+close_button.grid(ipady=10, ipadx=10, pady=12)
 
 # Material Selection
 label8 = tk.Label(root, text="Material Selection", wraplength=1, font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=30, height=40)
