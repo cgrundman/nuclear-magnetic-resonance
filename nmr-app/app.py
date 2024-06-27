@@ -1,8 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+import numpy as np
 
-from nmr_signal import nmr_signal_plot
+from nmr_signal import nmr_signal_generator
 
 
 root = tk.Tk()
@@ -24,12 +26,25 @@ label2.grid(row=0, column=3, columnspan=2)
 # NMR Signal
 frame3 = ttk.Frame(root)
 frame3.grid(row=1, column=0, columnspan=5)
-# label3 = tk.Label(root, text="NMR Signal", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=150, height=10)
-# label3.grid(row=1, column=0, columnspan=5)
+
+# Create NMR Signal
+x, lf_signal, nmr_signal = nmr_signal_generator()
+
+# Create a Matplotlib figure
+fig = Figure(figsize=(13.5, 2), dpi=100)
+fig.tight_layout()
+plot = fig.add_subplot(111)
+plot.plot(x, lf_signal)
+plot.plot(x, nmr_signal)
+# plot.set_title(title)
+plot.set_xlim([x[0], x[-1]])
+plot.set_ylim([0, 4])
+plot.set_ylabel("NMR Signal")
+# plot.set_yticklabels([])
+# plot.set_xticklabels([])
+plot.grid(True)
+
 # Embed the plot in the Tkinter frame
-
-fig = nmr_signal_plot()
-
 canvas = FigureCanvasTkAgg(fig, master=frame3)
 canvas.draw()
 canvas.get_tk_widget().grid(row=0, column=0)
