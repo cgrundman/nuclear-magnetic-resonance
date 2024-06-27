@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
-from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import numpy as np
+
+from nmr_signal import nmr_signal_plot
+
 
 root = tk.Tk()
 root.title("Tkinter App with Plots")
@@ -21,37 +21,18 @@ label1.grid(row=0, column=0, columnspan=2)
 label2 = tk.Label(root, text="LF Setting", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=60, height=10)
 label2.grid(row=0, column=3, columnspan=2)
 
-# Function to create a plot
-def nmr_signal_plot(frame, title):
-    # Create a Matplotlib figure
-    fig = Figure(figsize=(13.5, 2), dpi=100)
-    fig.tight_layout()
-    plot = fig.add_subplot(111)
-    data_points = 400
-    x1 = np.linspace(0, 100, data_points)
-    y1 = np.random.rand(data_points)
-    y1_sin = np.sin(x1/3) + 2
-    plot.plot(x1, y1, y1_sin)
-    # plot.set_title(title)
-    plot.set_xlim([x1[0], x1[-1]])
-    plot.set_ylim([0, 4])
-    plot.set_ylabel(title)
-    plot.set_yticklabels([])
-    plot.set_xticklabels([])
-    plot.grid(True)
-
-    # Embed the plot in the Tkinter frame
-    canvas = FigureCanvasTkAgg(fig, master=frame)
-    canvas.draw()
-    canvas.get_tk_widget().grid(row=0, column=0)
-
 # NMR Signal
 frame3 = ttk.Frame(root)
 frame3.grid(row=1, column=0, columnspan=5)
 # label3 = tk.Label(root, text="NMR Signal", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=150, height=10)
 # label3.grid(row=1, column=0, columnspan=5)
+# Embed the plot in the Tkinter frame
 
-nmr_signal_plot(frame3, "NMR Signal")
+fig = nmr_signal_plot()
+
+canvas = FigureCanvasTkAgg(fig, master=frame3)
+canvas.draw()
+canvas.get_tk_widget().grid(row=0, column=0)
 
 # NMR SPectrum
 label4 = tk.Label(root, text="NMR Spectrum", font=('Helvetica', font_size), bg='#4c4c4c', highlightbackground="black", highlightthickness=2, width=150, height=10)
