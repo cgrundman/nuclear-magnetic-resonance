@@ -13,7 +13,7 @@ def plot(name, x, y, plot_rgb):
     plot.set_xlim([x[0], x[-1]])
     plot.set_ylim([0, 4])
     plot.set_ylabel(name)
-    plot.set_facecolor('#7f7f7f')
+    plot.set_facecolor('#5a5a5a')
     plot.grid(True)
 
     return fig

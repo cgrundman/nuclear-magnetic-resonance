@@ -43,6 +43,26 @@ materials = [
     material_5
 ]
 
+# NMR function
+def nmr_function():
+
+    # Plot NMR Signal
+    x, lf_signal, nmr_signal = nmr_signal_generator(material=materials[4], HF_actual=16.0000)
+    fig = plot(name="NMR Signal", x=x, y=[lf_signal*2-0.5, nmr_signal], plot_rgb=["#4976fc", "#ff4f4d"])
+    canvas = FigureCanvasTkAgg(fig, master=frame3)
+    canvas.draw()
+    canvas.get_tk_widget().grid(row=0, column=0)
+
+    # Plot NMR Spectrum
+    x = np.linspace(16, 20, 1200)
+    nmr_spectrum = np.random.rand(len(x))
+    fig2 = plot(name="NMR Spectrum", x=x, y=[nmr_spectrum], plot_rgb=["#02edaf"])
+    canvas = FigureCanvasTkAgg(fig2, master=frame4)
+    canvas.draw()
+    canvas.get_tk_widget().grid(row=0, column=0)
+
+
+# Tkinter App
 root = tk.Tk()
 root.title("Tkinter App with Plots")
 root.configure(bg='#4c4c4c')
@@ -65,9 +85,11 @@ label2.grid(row=0, column=3, columnspan=2)
 frame3 = ttk.Frame(root)
 frame3.grid(row=1, column=0, columnspan=5)
 # Create NMR Signal
-x, lf_signal, nmr_signal = nmr_signal_generator(material=materials[4], HF_actual=16.0000)
+x = np.linspace(0, 5/28, 2000)
+lf_signal = np.zeros(len(x))
+nmr_signal = np.zeros(len(x))
 # Plot NMR Signal
-fig = plot(name="NMR Signal", x=x, y=[lf_signal, nmr_signal], plot_rgb=["#f01d51", "#1d78f0"])
+fig = plot(name="NMR Signal", x=x, y=[lf_signal, nmr_signal], plot_rgb=["#4976fc", "#ff4f4d"])
 # Embed the plot in the Tkinter frame
 canvas = FigureCanvasTkAgg(fig, master=frame3)
 canvas.draw()
@@ -78,10 +100,9 @@ frame4 = tk.Frame(root)
 frame4.grid(row=2, column=0, columnspan=5)
 # Create NMR Spectrum
 x = np.linspace(16, 20, 1200)
-lf = np.random.rand(len(x))
 nmr_spectrum = np.zeros(len(x))
 # Plot NMR Spectrum
-fig2 = plot(name="NMR Spectrum", x=x, y=[nmr_spectrum], plot_rgb=["#2cde5c"])
+fig2 = plot(name="NMR Spectrum", x=x, y=[nmr_spectrum], plot_rgb=["#02edaf"])
 # Embed the plot in the Tkinter frame
 canvas = FigureCanvasTkAgg(fig2, master=frame4)
 canvas.draw()
@@ -104,7 +125,7 @@ label6.grid(row=3, column=3)
 # Close Application
 label7 = tk.Label(root, text="Close", font=('Helvetica', font_size), bg=bg_color, width=30, height=10)
 label7.grid(row=3, column=4)
-run_button = ttk.Button(label7, text="Run", command=root.destroy, style='Red.TButton')
+run_button = ttk.Button(label7, text="Run", command=nmr_function, style='Red.TButton')
 run_button.grid(ipady=10, ipadx=10)
 close_button = ttk.Button(label7, text="Close", command=root.destroy, style='Red.TButton')
 close_button.grid(ipady=10, ipadx=10, pady=12)
