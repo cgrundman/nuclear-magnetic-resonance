@@ -153,3 +153,76 @@ close_button.grid(ipady=10, ipadx=10, pady=12)
 label8 = tk.Label(root, text="Material Selection", wraplength=1, font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=30, height=40)
 label8.grid(row=0, rowspan=4, column=5)
 
+root.mainloop()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# import tkinter as tk
+# from tkinter import ttk
+# import matplotlib.pyplot as plt
+# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+# import numpy as np
+# import time
+
+# class RandomPlotApp:
+#     def __init__(self, root):
+#         self.root = root
+#         self.root.title("Random Plot App")
+        
+#         # Create a plot figure
+#         self.fig, self.ax = plt.subplots()
+#         self.ax.set_title("Random Numbers Plot")
+#         self.canvas = FigureCanvasTkAgg(self.fig, master=root)
+#         self.canvas_widget = self.canvas.get_tk_widget()
+#         self.canvas_widget.pack()
+
+#         # Create a button
+#         self.plot_button = ttk.Button(root, text="Plot Random Numbers", command=self.plot_multiple_random_numbers)
+#         self.plot_button.pack()
+
+#     def plot_random_numbers(self):
+#         self.ax.clear()
+#         random_numbers = np.random.rand(10)
+#         self.ax.plot(random_numbers)
+#         self.ax.set_title("Random Numbers Plot")
+#         self.canvas.draw()
+#         self.root.update_idletasks()
+
+#     def plot_multiple_random_numbers(self):
+#         for _ in range(5):
+#             self.plot_random_numbers()
+#             self.root.after(500)  # Delay between plots for visibility
+
+# if __name__ == "__main__":
+#     root = tk.Tk()
+#     app = RandomPlotApp(root)
+#     root.mainloop()
