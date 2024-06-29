@@ -1,14 +1,6 @@
-import tkinter
-from tkinter import ttk
+import tensorflow as tf
 
-import sv_ttk
+from tensorflow import keras
 
-root = tkinter.Tk()
-
-button = ttk.Button(root, text="Click me!")
-button.pack()
-
-# This is where the magic happens
-sv_ttk.set_theme("dark")
-
-root.mainloop()
+model_dir = "models\model_nn.keras"
+model = keras.models.load_model(model_dir)
