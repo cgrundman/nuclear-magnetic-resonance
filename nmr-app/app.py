@@ -8,6 +8,8 @@ import random
 from nmr_signal import nmr_signal_generator
 from nmr_spectrum import nmr_spectrum_compiler
 
+# import sv_ttk
+
 
 # Materials
 material_1 = {
@@ -50,6 +52,14 @@ class NMRApp:
         self.root = root
         self.root.title("NMR App")
         self.root.configure(bg='#4c4c4c')
+
+        self.style = ttk.Style()
+        self.style.configure('Red.TButton', 
+                        background='#fa1505', # Red
+                        font=('Helvetica', 12),
+                        padding=6)
+        self.style.map('Red.TButton',
+                       foreground=[('active', '#fa1505')])
 
         font_size = 12
         bg_color = '#4c4c4c'
@@ -135,10 +145,15 @@ class NMRApp:
         self.label8 = tk.Label(self.root, text="Material Selection", wraplength=1, font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=30, height=40)
         self.label8.grid(row=0, rowspan=4, column=5)
 
+        # sv_ttk.set_theme("dark")
+
+
     # NMR function
     def nmr_function(self):
 
-        HF_setting = 15.75
+        HF_setting = 17
+        nmr_spectrum = np.zeros([3, 1200])
+        nmr_spectrum[0,:] = np.linspace(16, 20, num=1200)
 
         # while HF_setting <= 20:
         for i in range(10):
@@ -157,10 +172,13 @@ class NMRApp:
             self.root.after(50)
 
             # Generate NMR Spectrum
-            x, nmr_spectrum = nmr_spectrum_compiler()
+            nmr_spectrum = nmr_spectrum_compiler(NMR_spectrum=nmr_spectrum, 
+                                                 NMR_signal=nmr_signal, 
+                                                 LF_signal=lf_signal,
+                                                 HF_setting=HF_actual)
 
             # Plot NMR Spectrum
-            self.plot_nmr_spectrum(x=x, y=nmr_spectrum, plot_rgb="#02edaf")
+            self.plot_nmr_spectrum(x=np.linspace(16, 20, 1200), y=nmr_spectrum, plot_rgb="#02edaf")
             self.root.after(50)
 
             # Generate Pattern Search
