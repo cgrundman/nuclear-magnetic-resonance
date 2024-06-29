@@ -143,32 +143,24 @@ class NMRApp:
             x, lf_signal, nmr_signal = nmr_signal_generator(material=materials[4], HF_actual=HF_actual)
             
             # Plot NMR Signal
-            fig = self.plot_nmr_signal(x=x, y=[lf_signal*2-0.5, nmr_signal], plot_rgb=["#4976fc", "#ff4f4d"])
-            self.canvas = FigureCanvasTkAgg(fig, master=self.frame3)
-            self.canvas.draw()
-            self.canvas.get_tk_widget().grid(row=0, column=0)
+            self.plot_nmr_signal(x=x, y=[lf_signal*2-0.5, nmr_signal], plot_rgb=["#4976fc", "#ff4f4d"])
 
             HF_setting += .03125
 
-            self.root.update_idletasks()
             self.root.after(500)
 
     def plot_nmr_signal(self, x, y, plot_rgb):
         # Create a Matplotlib figure
-        fig = Figure(figsize=(13.5, 2), dpi=100)
-        fig.patch.set_facecolor('#4c4c4c')
-        fig.tight_layout()
-        plot = fig.add_subplot(111)
-        # print(np.size(y))
+        self.ax.clear()
         for i in range(len(y)):
-            plot.plot(x, y[i], color=plot_rgb[i])
-        plot.set_xlim([x[0], x[-1]])
-        plot.set_ylim([0, 4])
-        plot.set_ylabel("NMR Signal")
-        plot.set_facecolor('#5a5a5a')
-        plot.grid(True)
-
-        return fig
+            self.ax.plot(x, y[i], color=plot_rgb[i])
+        self.ax.set_xlim([x[0], x[-1]])
+        self.ax.set_ylim([0, 4])
+        self.ax.set_ylabel("NMR Signal")
+        self.ax.set_facecolor('#5a5a5a')
+        self.ax.grid(True)
+        self.canvas.draw()
+        self.root.update_idletasks()
 
 
 if __name__ == "__main__":
