@@ -6,6 +6,7 @@ import numpy as np
 import random
 
 from nmr_signal import nmr_signal_generator
+from nmr_spectrum import nmr_spectrum_compiler
 
 
 # Materials
@@ -156,8 +157,7 @@ class NMRApp:
             self.root.after(50)
 
             # Generate NMR Spectrum
-            x = np.linspace(16, 20, 1200)
-            nmr_spectrum = np.random.rand(len(x))
+            x, nmr_spectrum = nmr_spectrum_compiler()
 
             # Plot NMR Spectrum
             self.plot_nmr_spectrum(x=x, y=nmr_spectrum, plot_rgb="#02edaf")
