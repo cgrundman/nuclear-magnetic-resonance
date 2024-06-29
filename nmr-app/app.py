@@ -54,16 +54,16 @@ class NMRApp:
         font_size = 12
         bg_color = '#4c4c4c'
 
-        HF_setting = 16.0000
-        LF_setting = 27
+        # HF_setting = 16.0000
+        # LF_setting = 27
         
-        # HF Setting
-        self.label1 = tk.Label(self.root, text=f"HF Seeting: {HF_setting:.4f}MHz", font=('Courier', 36), bg=bg_color)
-        self.label1.grid(row=0, column=0, columnspan=2)
+        # # HF Setting
+        # self.label1 = tk.Label(self.root, text=f"HF Seeting: {HF_setting:.4f}MHz", font=('Courier', 36), bg=bg_color)
+        # self.label1.grid(row=0, column=0, columnspan=2)
 
-        # LF Setting
-        self.label2 = tk.Label(self.root, text=f"LF Setting: {LF_setting}Hz", font=('Courier', 36), bg=bg_color)
-        self.label2.grid(row=0, column=3, columnspan=2)
+        # # LF Setting
+        # self.label2 = tk.Label(self.root, text=f"LF Setting: {LF_setting}Hz", font=('Courier', 36), bg=bg_color)
+        # self.label2.grid(row=0, column=3, columnspan=2)
 
         # NMR Signal
         self.frame3 = ttk.Frame(self.root)
@@ -73,38 +73,48 @@ class NMRApp:
         lf_signal = np.zeros(len(x))
         nmr_signal = np.zeros(len(x))
         # Plot NMR Signal
-        fig = plot(name="NMR Signal", x=x, y=[lf_signal, nmr_signal], plot_rgb=["#4976fc", "#ff4f4d"])
+        self.fig = Figure(figsize=(13.5, 2), dpi=100)
+        self.fig.patch.set_facecolor('#4c4c4c')
+        self.fig.tight_layout()
+        self.ax = self.fig.add_subplot(111)
+        self.ax.set_ylabel("NMR Signal")
+        self.ax.set_facecolor('#5a5a5a')
+        self.ax.grid(True)
+        self.ax.set_xlim([x[0], x[-1]])
+        self.ax.set_ylim([0, 4])
+        # self.fig = self.plot_nmr_signal(x=x, y=[lf_signal, nmr_signal], plot_rgb=["#4976fc", "#ff4f4d"])
         # Embed the plot in the Tkinter frame
-        self.canvas = FigureCanvasTkAgg(fig, master=self.frame3)
-        self.canvas.draw()
-        self.canvas.get_tk_widget().grid(row=0, column=0)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame3)
+        # self.canvas.draw()
+        self.canvas_widget = self.canvas.get_tk_widget()
+        self.canvas_widget.grid(row=0, column=0)
 
-        # NMR SPectrum
-        self.frame4 = tk.Frame(self.root)
-        self.frame4.grid(row=2, column=0, columnspan=5)
-        # Create NMR Spectrum
-        x = np.linspace(16, 20, 1200)
-        nmr_spectrum = np.zeros(len(x))
-        # Plot NMR Spectrum
-        fig2 = plot(name="NMR Spectrum", x=x, y=[nmr_spectrum], plot_rgb=["#02edaf"])
-        # Embed the plot in the Tkinter frame
-        self.canvas = FigureCanvasTkAgg(fig2, master=self.frame4)
-        self.canvas.draw()
-        self.canvas.get_tk_widget().grid(row=0, column=0)
+        # # NMR SPectrum
+        # self.frame4 = tk.Frame(self.root)
+        # self.frame4.grid(row=2, column=0, columnspan=5)
+        # # Create NMR Spectrum
+        # x = np.linspace(16, 20, 1200)
+        # nmr_spectrum = np.zeros(len(x))
+        # # Plot NMR Spectrum
+        # fig2 = plot(name="NMR Spectrum", x=x, y=[nmr_spectrum], plot_rgb=["#02edaf"])
+        # # Embed the plot in the Tkinter frame
+        # self.canvas = FigureCanvasTkAgg(fig2, master=self.frame4)
+        # self.canvas.draw()
+        # self.canvas.get_tk_widget().grid(row=0, column=0)
 
-        # Pattern Recognition
-        self.frame5 = tk.Frame(self.root)
-        self.frame5.grid(row=3, column=0, columnspan=3)
-        x = [1, 2, 3, 4, 5]
-        pattern_rec = np.random.rand(5)
-        fig3 = bar(name="Pattern Recognition", x=x, y=pattern_rec)
-        self.canvas = FigureCanvasTkAgg(fig3, master=self.frame5)
-        self.canvas.draw()
-        self.canvas.get_tk_widget().grid(row=0, column=0)
+        # # Pattern Recognition
+        # self.frame5 = tk.Frame(self.root)
+        # self.frame5.grid(row=3, column=0, columnspan=3)
+        # x = [1, 2, 3, 4, 5]
+        # pattern_rec = np.random.rand(5)
+        # fig3 = bar(name="Pattern Recognition", x=x, y=pattern_rec)
+        # self.canvas = FigureCanvasTkAgg(fig3, master=self.frame5)
+        # self.canvas.draw()
+        # self.canvas.get_tk_widget().grid(row=0, column=0)
 
-        # Material Guess
-        self.label6 = tk.Label(self.root, text=f"Guess: Material {np.argmax(pattern_rec) + 1}", font=('Helvetica', 25), bg=bg_color)#, width=30, height=10)
-        self.label6.grid(row=3, column=3)
+        # # Material Guess
+        # self.label6 = tk.Label(self.root, text=f"Guess: Material {np.argmax(pattern_rec) + 1}", font=('Helvetica', 25), bg=bg_color)#, width=30, height=10)
+        # self.label6.grid(row=3, column=3)
 
         # Buttons for Application
         self.label7 = tk.Label(self.root, font=('Helvetica', font_size), bg=bg_color, width=30, height=10)
@@ -114,9 +124,9 @@ class NMRApp:
         self.close_button = ttk.Button(self.label7, text="Close", command=self.root.destroy, style='Red.TButton')
         self.close_button.grid(ipady=10, ipadx=10, pady=20)
 
-        # Material Selection
-        self.label8 = tk.Label(self.root, text="Material Selection", wraplength=1, font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=30, height=40)
-        self.label8.grid(row=0, rowspan=4, column=5)
+        # # Material Selection
+        # self.label8 = tk.Label(self.root, text="Material Selection", wraplength=1, font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=30, height=40)
+        # self.label8.grid(row=0, rowspan=4, column=5)
 
     # NMR function
     def nmr_function(self):
@@ -133,16 +143,79 @@ class NMRApp:
             x, lf_signal, nmr_signal = nmr_signal_generator(material=materials[4], HF_actual=HF_actual)
             
             # Plot NMR Signal
-            fig = plot(name="NMR Signal", x=x, y=[lf_signal*2-0.5, nmr_signal], plot_rgb=["#4976fc", "#ff4f4d"])
+            fig = self.plot_nmr_signal(x=x, y=[lf_signal*2-0.5, nmr_signal], plot_rgb=["#4976fc", "#ff4f4d"])
             self.canvas = FigureCanvasTkAgg(fig, master=self.frame3)
             self.canvas.draw()
             self.canvas.get_tk_widget().grid(row=0, column=0)
 
             HF_setting += .03125
 
+            self.root.update_idletasks()
             self.root.after(500)
+
+    def plot_nmr_signal(self, x, y, plot_rgb):
+        # Create a Matplotlib figure
+        fig = Figure(figsize=(13.5, 2), dpi=100)
+        fig.patch.set_facecolor('#4c4c4c')
+        fig.tight_layout()
+        plot = fig.add_subplot(111)
+        # print(np.size(y))
+        for i in range(len(y)):
+            plot.plot(x, y[i], color=plot_rgb[i])
+        plot.set_xlim([x[0], x[-1]])
+        plot.set_ylim([0, 4])
+        plot.set_ylabel("NMR Signal")
+        plot.set_facecolor('#5a5a5a')
+        plot.grid(True)
+
+        return fig
+
 
 if __name__ == "__main__":
     root = tk.Tk()
     app = NMRApp(root)
+    root.mainloop()
+
+
+
+
+
+import tkinter as tk
+from tkinter import ttk
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import numpy as np
+
+class RandomPlotApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Random Plot App")
+        
+        # Create a plot figure
+        self.fig, self.ax = plt.subplots()
+        self.ax.set_title("Random Numbers Plot")
+        self.canvas = FigureCanvasTkAgg(self.fig, master=root)
+        self.canvas_widget = self.canvas.get_tk_widget()
+        self.canvas_widget.pack()
+
+        # Create a button
+        self.plot_button = ttk.Button(root, text="Plot Random Numbers", command=self.plot_multiple_random_numbers)
+        self.plot_button.pack()
+
+    def plot_random_numbers(self):
+        self.ax.clear()
+        random_numbers = np.random.rand(10)
+        self.ax.plot(random_numbers)
+        self.ax.set_title("Random Numbers Plot")
+        self.canvas.draw()
+        self.root.update_idletasks()
+
+    def plot_multiple_random_numbers(self):
+        for _ in range(5):
+            self.plot_random_numbers()
+            self.root.after(500)  # Delay between plots for visibility
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = RandomPlotApp(root)
     root.mainloop()
