@@ -5,6 +5,9 @@ FROM python:3.12.3
 RUN apt-get update && apt-get install -y \
     python3-tk \
     xvfb \
+    libatlas-base-dev \
+    libjpeg-dev \
+    libpng-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory in the container
@@ -20,4 +23,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 ENV DISPLAY=:99
 
 # Run Xvfb in the background and then run the Tkinter app
-CMD ["sh", "-c", "xvfb-run -a python app.py"]
+CMD ["xvfb-run", "-a", "python", "app.py"]
