@@ -19,7 +19,7 @@ def plot(name, x, y, plot_rgb):
     return fig
 
 
-def bar(name, x, y):
+def bar(x, y):
     # Create a Matplotlib figure
     material_guess = np.argmax(y) + 1
     fig = Figure(figsize=(7, 2), dpi=100)

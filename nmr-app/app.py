@@ -6,7 +6,6 @@ import numpy as np
 import random
 
 from nmr_signal import nmr_signal_generator
-from plot import plot, bar
 
 
 # Materials
@@ -68,9 +67,7 @@ class NMRApp:
         # NMR Signal
         self.frame3 = ttk.Frame(self.root)
         self.frame3.grid(row=1, column=0, columnspan=5)
-        # Create NMR Signal
-        x = np.linspace(0, 5/28, 2000)
-        # Plot NMR Signal
+        # Create NMR Signal Plot
         self.fig_sig = Figure(figsize=(13.5, 2), dpi=100)
         self.fig_sig.patch.set_facecolor('#4c4c4c')
         self.fig_sig.tight_layout()
@@ -78,7 +75,7 @@ class NMRApp:
         self.ax_sig.set_ylabel("NMR Signal")
         self.ax_sig.set_facecolor('#5a5a5a')
         self.ax_sig.grid(True)
-        self.ax_sig.set_xlim([x[0], x[-1]])
+        self.ax_sig.set_xlim([0, 5/28])
         self.ax_sig.set_ylim([0, 4])
         # Embed the plot in the Tkinter frame
         self.canvas_sig = FigureCanvasTkAgg(self.fig_sig, master=self.frame3)
@@ -88,10 +85,7 @@ class NMRApp:
         # NMR SPectrum
         self.frame4 = tk.Frame(self.root)
         self.frame4.grid(row=2, column=0, columnspan=5)
-        # Create NMR Spectrum
-        x = np.linspace(16, 20, 1200)
-        nmr_spectrum = np.zeros(len(x))
-        # Plot NMR Spectrum
+        # Create NMR Spectrum Plot
         self.fig_spec = Figure(figsize=(13.5, 2), dpi=100)
         self.fig_spec.patch.set_facecolor('#4c4c4c')
         self.fig_spec.tight_layout()
@@ -99,26 +93,34 @@ class NMRApp:
         self.ax_spec.set_ylabel("NMR Spectrum")
         self.ax_spec.set_facecolor('#5a5a5a')
         self.ax_spec.grid(True)
-        self.ax_spec.set_xlim([x[0], x[-1]])
+        self.ax_spec.set_xlim([16, 20])
         self.ax_spec.set_ylim([0, 4])
         # Embed the plot in the Tkinter frame
         self.canvas_spec = FigureCanvasTkAgg(self.fig_spec, master=self.frame4)
         self.canvas_widget_spec = self.canvas_spec.get_tk_widget()
         self.canvas_widget_spec.grid(row=0, column=0)
 
-        # # Pattern Recognition
-        # self.frame5 = tk.Frame(self.root)
-        # self.frame5.grid(row=3, column=0, columnspan=3)
-        # x = [1, 2, 3, 4, 5]
-        # pattern_rec = np.random.rand(5)
+        # Pattern Recognition
+        self.frame5 = tk.Frame(self.root)
+        self.frame5.grid(row=3, column=0, columnspan=3)
+        x = [1, 2, 3, 4, 5]
+        pattern_rec = np.random.rand(5)
+        self.fig_pat = Figure(figsize=(7, 2), dpi=100)
+        self.fig_pat.patch.set_facecolor('#4c4c4c')
+        self.fig_pat.tight_layout()
+        self.ax_pat = self.fig_pat.add_subplot(111)
+        self.ax_pat.set_xlim([0.4, 5.6])
+        self.ax_pat.set_ylim([0, 1])
+        self.ax_pat.set_title(f"Guess: ", x=1.3, y=0.5)
+        self.ax_pat.set_facecolor('#7f7f7f')
         # fig3 = bar(name="Pattern Recognition", x=x, y=pattern_rec)
-        # self.canvas = FigureCanvasTkAgg(fig3, master=self.frame5)
-        # self.canvas.draw()
-        # self.canvas.get_tk_widget().grid(row=0, column=0)
-
-        # # Material Guess
-        # self.label6 = tk.Label(self.root, text=f"Guess: Material {np.argmax(pattern_rec) + 1}", font=('Helvetica', 25), bg=bg_color)#, width=30, height=10)
-        # self.label6.grid(row=3, column=3)
+        self.canvas_pat = FigureCanvasTkAgg(self.fig_pat, master=self.frame5)
+        self.canvas_widget_pat = self.canvas_pat.get_tk_widget()
+        self.canvas_widget_pat.grid(row=0, column=0)
+        
+        # Material Guess
+        self.label6 = tk.Label(self.root, text=f"Guess: Material {np.argmax(pattern_rec) + 1}\nConfidence: {pattern_rec[np.argmax(pattern_rec)]*100:.1f}%", font=('Helvetica', 25), bg=bg_color)#, width=30, height=10)
+        self.label6.grid(row=3, column=3)
 
         # Buttons for Application
         self.label7 = tk.Label(self.root, font=('Helvetica', font_size), bg=bg_color, width=30, height=10)
@@ -128,9 +130,9 @@ class NMRApp:
         self.close_button = ttk.Button(self.label7, text="Close", command=self.root.destroy, style='Red.TButton')
         self.close_button.grid(ipady=10, ipadx=10, pady=20)
 
-        # # Material Selection
-        # self.label8 = tk.Label(self.root, text="Material Selection", wraplength=1, font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=30, height=40)
-        # self.label8.grid(row=0, rowspan=4, column=5)
+        # Material Selection
+        self.label8 = tk.Label(self.root, text="Material Selection", wraplength=1, font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=30, height=40)
+        self.label8.grid(row=0, rowspan=4, column=5)
 
     # NMR function
     def nmr_function(self):
@@ -161,6 +163,17 @@ class NMRApp:
             self.plot_nmr_spectrum(x=x, y=nmr_spectrum, plot_rgb="#02edaf")
             self.root.after(50)
 
+            # Generate Pattern Search
+            x = [1, 2, 3, 4, 5]
+            pattern_rec = np.random.rand(5)
+
+            # Plot Pattern Recognition
+            self.plot_pattern_recognition(x=x, y=pattern_rec)
+
+            # Update the Pattern Recognition display
+            self.label6.config(text=f"Guess: Material {np.argmax(pattern_rec) + 1}\nConfidence: {pattern_rec[np.argmax(pattern_rec)]*100:.1f}%")
+            self.root.after(50)
+
             HF_setting += .03125
 
     def plot_nmr_signal(self, x, y, plot_rgb):
@@ -186,6 +199,18 @@ class NMRApp:
         self.ax_spec.set_facecolor('#5a5a5a')
         self.ax_spec.grid(True)
         self.canvas_spec.draw()
+        self.root.update_idletasks()
+
+    def plot_pattern_recognition(self, x, y):
+        # Create a Matplotlib figure
+        material_guess = np.argmax(y) + 1
+        self.ax_pat.clear()
+        self.ax_pat.bar(x, y, width=1, edgecolor="#000000")
+        self.ax_pat.set_xlim([0.4, 5.6])
+        self.ax_pat.set_ylim([0, 1])
+        self.ax_pat.set_title(f"Guess: Material {material_guess}", x=1.3, y=0.5)
+        self.ax_pat.set_facecolor('#7f7f7f')
+        self.canvas_pat.draw()
         self.root.update_idletasks()
 
 
