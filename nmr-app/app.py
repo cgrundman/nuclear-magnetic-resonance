@@ -54,53 +54,57 @@ class NMRApp:
         font_size = 12
         bg_color = '#4c4c4c'
 
-        # HF_setting = 16.0000
-        # LF_setting = 27
+        HF_setting = 16.0000
+        LF_setting = 27
         
-        # # HF Setting
-        # self.label1 = tk.Label(self.root, text=f"HF Seeting: {HF_setting:.4f}MHz", font=('Courier', 36), bg=bg_color)
-        # self.label1.grid(row=0, column=0, columnspan=2)
+        # HF Setting
+        self.label1 = tk.Label(self.root, text=f"HF Setting: {HF_setting:.4f}MHz", font=('Courier', 36), bg=bg_color)
+        self.label1.grid(row=0, column=0, columnspan=2)
 
-        # # LF Setting
-        # self.label2 = tk.Label(self.root, text=f"LF Setting: {LF_setting}Hz", font=('Courier', 36), bg=bg_color)
-        # self.label2.grid(row=0, column=3, columnspan=2)
+        # LF Setting
+        self.label2 = tk.Label(self.root, text=f"LF Setting: {LF_setting}Hz", font=('Courier', 36), bg=bg_color)
+        self.label2.grid(row=0, column=3, columnspan=2)
 
         # NMR Signal
         self.frame3 = ttk.Frame(self.root)
         self.frame3.grid(row=1, column=0, columnspan=5)
         # Create NMR Signal
         x = np.linspace(0, 5/28, 2000)
-        lf_signal = np.zeros(len(x))
-        nmr_signal = np.zeros(len(x))
         # Plot NMR Signal
-        self.fig = Figure(figsize=(13.5, 2), dpi=100)
-        self.fig.patch.set_facecolor('#4c4c4c')
-        self.fig.tight_layout()
-        self.ax = self.fig.add_subplot(111)
-        self.ax.set_ylabel("NMR Signal")
-        self.ax.set_facecolor('#5a5a5a')
-        self.ax.grid(True)
-        self.ax.set_xlim([x[0], x[-1]])
-        self.ax.set_ylim([0, 4])
-        # self.fig = self.plot_nmr_signal(x=x, y=[lf_signal, nmr_signal], plot_rgb=["#4976fc", "#ff4f4d"])
+        self.fig_sig = Figure(figsize=(13.5, 2), dpi=100)
+        self.fig_sig.patch.set_facecolor('#4c4c4c')
+        self.fig_sig.tight_layout()
+        self.ax_sig = self.fig_sig.add_subplot(111)
+        self.ax_sig.set_ylabel("NMR Signal")
+        self.ax_sig.set_facecolor('#5a5a5a')
+        self.ax_sig.grid(True)
+        self.ax_sig.set_xlim([x[0], x[-1]])
+        self.ax_sig.set_ylim([0, 4])
         # Embed the plot in the Tkinter frame
-        self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame3)
-        # self.canvas.draw()
-        self.canvas_widget = self.canvas.get_tk_widget()
-        self.canvas_widget.grid(row=0, column=0)
+        self.canvas_sig = FigureCanvasTkAgg(self.fig_sig, master=self.frame3)
+        self.canvas_widget_sig = self.canvas_sig.get_tk_widget()
+        self.canvas_widget_sig.grid(row=0, column=0)
 
-        # # NMR SPectrum
-        # self.frame4 = tk.Frame(self.root)
-        # self.frame4.grid(row=2, column=0, columnspan=5)
-        # # Create NMR Spectrum
-        # x = np.linspace(16, 20, 1200)
-        # nmr_spectrum = np.zeros(len(x))
-        # # Plot NMR Spectrum
-        # fig2 = plot(name="NMR Spectrum", x=x, y=[nmr_spectrum], plot_rgb=["#02edaf"])
-        # # Embed the plot in the Tkinter frame
-        # self.canvas = FigureCanvasTkAgg(fig2, master=self.frame4)
-        # self.canvas.draw()
-        # self.canvas.get_tk_widget().grid(row=0, column=0)
+        # NMR SPectrum
+        self.frame4 = tk.Frame(self.root)
+        self.frame4.grid(row=2, column=0, columnspan=5)
+        # Create NMR Spectrum
+        x = np.linspace(16, 20, 1200)
+        nmr_spectrum = np.zeros(len(x))
+        # Plot NMR Spectrum
+        self.fig_spec = Figure(figsize=(13.5, 2), dpi=100)
+        self.fig_spec.patch.set_facecolor('#4c4c4c')
+        self.fig_spec.tight_layout()
+        self.ax_spec = self.fig_spec.add_subplot(111)
+        self.ax_spec.set_ylabel("NMR Spectrum")
+        self.ax_spec.set_facecolor('#5a5a5a')
+        self.ax_spec.grid(True)
+        self.ax_spec.set_xlim([x[0], x[-1]])
+        self.ax_spec.set_ylim([0, 4])
+        # Embed the plot in the Tkinter frame
+        self.canvas_spec = FigureCanvasTkAgg(self.fig_spec, master=self.frame4)
+        self.canvas_widget_spec = self.canvas_spec.get_tk_widget()
+        self.canvas_widget_spec.grid(row=0, column=0)
 
         # # Pattern Recognition
         # self.frame5 = tk.Frame(self.root)
@@ -134,7 +138,10 @@ class NMRApp:
         HF_setting = 15.75
 
         # while HF_setting <= 20:
-        for i in range(5):
+        for i in range(10):
+
+            # Update the HF setting display
+            self.label1.config(text=f"HF Setting: {HF_setting:.4f}MHz")
 
             # Add Randomization of the HF Setting
             HF_actual = HF_setting + ((random.random()-.5)/50)
@@ -144,22 +151,41 @@ class NMRApp:
             
             # Plot NMR Signal
             self.plot_nmr_signal(x=x, y=[lf_signal*2-0.5, nmr_signal], plot_rgb=["#4976fc", "#ff4f4d"])
+            self.root.after(50)
+
+            # Generate NMR Spectrum
+            x = np.linspace(16, 20, 1200)
+            nmr_spectrum = np.random.rand(len(x))
+
+            # Plot NMR Spectrum
+            self.plot_nmr_spectrum(x=x, y=nmr_spectrum, plot_rgb="#02edaf")
+            self.root.after(50)
 
             HF_setting += .03125
 
-            self.root.after(500)
-
     def plot_nmr_signal(self, x, y, plot_rgb):
         # Create a Matplotlib figure
-        self.ax.clear()
+        self.ax_sig.clear()
         for i in range(len(y)):
-            self.ax.plot(x, y[i], color=plot_rgb[i])
-        self.ax.set_xlim([x[0], x[-1]])
-        self.ax.set_ylim([0, 4])
-        self.ax.set_ylabel("NMR Signal")
-        self.ax.set_facecolor('#5a5a5a')
-        self.ax.grid(True)
-        self.canvas.draw()
+            self.ax_sig.plot(x, y[i], color=plot_rgb[i])
+        self.ax_sig.set_xlim([x[0], x[-1]])
+        self.ax_sig.set_ylim([0, 4])
+        self.ax_sig.set_ylabel("NMR Signal")
+        self.ax_sig.set_facecolor('#5a5a5a')
+        self.ax_sig.grid(True)
+        self.canvas_sig.draw()
+        self.root.update_idletasks()
+
+    def plot_nmr_spectrum(self, x, y, plot_rgb):
+        # Create a Matplotlib figure
+        self.ax_spec.clear()
+        self.ax_spec.plot(x, y, color=plot_rgb)
+        self.ax_spec.set_xlim([x[0], x[-1]])
+        self.ax_spec.set_ylim([0, 4])
+        self.ax_spec.set_ylabel("NMR Signal")
+        self.ax_spec.set_facecolor('#5a5a5a')
+        self.ax_spec.grid(True)
+        self.canvas_spec.draw()
         self.root.update_idletasks()
 
 
@@ -172,42 +198,42 @@ if __name__ == "__main__":
 
 
 
-import tkinter as tk
-from tkinter import ttk
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import numpy as np
+# import tkinter as tk
+# from tkinter import ttk
+# import matplotlib.pyplot as plt
+# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+# import numpy as np
 
-class RandomPlotApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Random Plot App")
+# class RandomPlotApp:
+#     def __init__(self, root):
+#         self.root = root
+#         self.root.title("Random Plot App")
         
-        # Create a plot figure
-        self.fig, self.ax = plt.subplots()
-        self.ax.set_title("Random Numbers Plot")
-        self.canvas = FigureCanvasTkAgg(self.fig, master=root)
-        self.canvas_widget = self.canvas.get_tk_widget()
-        self.canvas_widget.pack()
+#         # Create a plot figure
+#         self.fig, self.ax = plt.subplots()
+#         self.ax.set_title("Random Numbers Plot")
+#         self.canvas = FigureCanvasTkAgg(self.fig, master=root)
+#         self.canvas_widget = self.canvas.get_tk_widget()
+#         self.canvas_widget.pack()
 
-        # Create a button
-        self.plot_button = ttk.Button(root, text="Plot Random Numbers", command=self.plot_multiple_random_numbers)
-        self.plot_button.pack()
+#         # Create a button
+#         self.plot_button = ttk.Button(root, text="Plot Random Numbers", command=self.plot_multiple_random_numbers)
+#         self.plot_button.pack()
 
-    def plot_random_numbers(self):
-        self.ax.clear()
-        random_numbers = np.random.rand(10)
-        self.ax.plot(random_numbers)
-        self.ax.set_title("Random Numbers Plot")
-        self.canvas.draw()
-        self.root.update_idletasks()
+#     def plot_random_numbers(self):
+#         self.ax.clear()
+#         random_numbers = np.random.rand(10)
+#         self.ax.plot(random_numbers)
+#         self.ax.set_title("Random Numbers Plot")
+#         self.canvas.draw()
+#         self.root.update_idletasks()
 
-    def plot_multiple_random_numbers(self):
-        for _ in range(5):
-            self.plot_random_numbers()
-            self.root.after(500)  # Delay between plots for visibility
+#     def plot_multiple_random_numbers(self):
+#         for _ in range(5):
+#             self.plot_random_numbers()
+#             self.root.after(500)  # Delay between plots for visibility
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = RandomPlotApp(root)
-    root.mainloop()
+# if __name__ == "__main__":
+#     root = tk.Tk()
+#     app = RandomPlotApp(root)
+#     root.mainloop()
