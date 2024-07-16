@@ -7,6 +7,8 @@ import random
 
 from nmr_signal import nmr_signal_generator
 from nmr_spectrum import nmr_spectrum_compiler
+from tf_model import load_pattern_search
+from tf_model import predict
 
 
 # Materials
@@ -44,6 +46,8 @@ materials = [
     material_5
 ]
 
+# Pattern Search
+pattern_search = load_pattern_search()
 
 class NMRApp:
     def __init__(self, root):
@@ -166,7 +170,7 @@ class NMRApp:
             HF_actual = HF_setting + ((random.random()-.5)/50)
 
             # Generate NMR Signal
-            x, lf_signal, nmr_signal = nmr_signal_generator(material=materials[4], HF_actual=HF_actual)
+            x, lf_signal, nmr_signal = nmr_signal_generator(material=materials[3], HF_actual=HF_actual)
             
             # Plot NMR Signal
             self.plot_nmr_signal(x=x, y=[lf_signal*2-0.5, nmr_signal], plot_rgb=["#4976fc", "#ff4f4d"])
@@ -188,11 +192,12 @@ class NMRApp:
             # Generate Pattern Search
             material_list = [1, 2, 3, 4, 5]
             random_guess = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
-            pattern_rec = np.array([1, 0, 0, 0, 0])
+            pattern_rec = predict(model=pattern_search, input=nmr_spectrum[1])
+            print(nmr_spectrum[1])
+            print(pattern_rec)
             while num_scanned < 1200 and nmr_spectrum[1,num_scanned] > 0:
                 num_scanned += 1
             scanned_percent = num_scanned/len(nmr_spectrum[0])
-
             guess = random_guess*(1-scanned_percent) + pattern_rec*scanned_percent
 
             # Plot Pattern Recognition
