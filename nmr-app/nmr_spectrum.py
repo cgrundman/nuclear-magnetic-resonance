@@ -1,15 +1,19 @@
 import numpy as np
 
-def nmr_spectrum_compiler(NMR_spectrum, NMR_signal, LF_signal, HF_setting):
+def nmr_spectrum_compiler(NMR_spectrum, NMR_signal, LF_signal, HF_setting, time):
 
-    NMR_merged, LF_merged = merge(NMR_signal=NMR_signal, LF_signal=LF_signal)
+    time_trimmed, NMR_trimmed, LF_trimmed = trim_signal(time, NMR_signal, LF_signal)
 
-    NMR_merged = NMR_merged*(-1) + 4
+    if HF_setting < 19.9:
 
-    NMR_spectrum = spectrum_combine(NMR_spectrum=NMR_spectrum, 
-                                    NMR_signal=NMR_merged,
-                                    LF_signal=LF_merged,
-                                    HF_setting=HF_setting)
+        NMR_merged, LF_merged = merge(NMR_signal=NMR_trimmed, LF_signal=LF_trimmed)
+
+        NMR_merged = NMR_merged*(-1) + 4
+
+        NMR_spectrum = spectrum_combine(NMR_spectrum=NMR_spectrum, 
+                                        NMR_signal=NMR_merged,
+                                        LF_signal=LF_merged,
+                                        HF_setting=HF_setting)
 
     return NMR_spectrum
 
@@ -17,7 +21,7 @@ def merge(NMR_signal, LF_signal):
 
     # Identify where to slice the signals
     seperator_list = [0]
-    for n in range(len(NMR_signal)):
+    for n in range(len(LF_signal)):
         if n != 0:
             if LF_signal[n-1] > LF_signal[n]:
                 seperator_list.append(n)
@@ -25,7 +29,7 @@ def merge(NMR_signal, LF_signal):
 
     # Create parameters of each slice
     n_slices = len(seperator_list)-1 # number of slices
-    slice_size = len(NMR_signal) # Commonize the 
+    slice_size = len(NMR_signal) # create the size of each slice
     for i in range(n_slices):
         size = seperator_list[i+1]-seperator_list[i]
         if size<slice_size:
@@ -37,7 +41,7 @@ def merge(NMR_signal, LF_signal):
     for i in range(n_slices):
         NMR_slices[i,:] = NMR_signal[seperator_list[i]:seperator_list[i]+slice_size]
         LF_slices[i,:] = LF_signal[seperator_list[i]:seperator_list[i]+slice_size]
-        
+
     # Merge the slices
     NMR_merged = np.zeros([np.shape(NMR_slices)[1]])
     LF_merged = np.zeros([np.shape(LF_slices)[1]])
@@ -47,9 +51,6 @@ def merge(NMR_signal, LF_signal):
             LF_merged[data_point] += LF_slices[slice,data_point]
     NMR_merged = NMR_merged/5
     LF_merged = LF_merged/5
-
-    # Plot Slices
-    # plot_merge_iteration(NMR_signal, NMR_slices, NMR_merged, LF_signal, LF_slices, LF_merged)
 
     return NMR_merged, LF_merged
 
@@ -101,5 +102,35 @@ def find_closest(array, baseline):
             if abs(value - value_baseline) < 0.00336:
                 idx_spec = np.where(baseline==value_baseline)[0][0]
                 idx_lf = np.where(array==value)[0][0] 
-    
+
                 return idx_spec, idx_lf
+            
+            
+def trim_signal(time, NMR_signal, LF_signal):
+
+    # Adjust the LF Signal
+    LF_signal -= 0.5
+    LF_signal /= 3
+
+    # Create trim ranges
+    idx_points = np.zeros([2,5])
+    i, j = 0, 0
+    for n in range(len(LF_signal)):
+        if LF_signal[n-1]<=.1 and LF_signal[n]>=.1:
+            idx_points[0,i] = np.where(time==time[n])[0]
+            i += 1
+        if LF_signal[n-1]<=.3 and LF_signal[n]>=.3:
+            idx_points[1,j] = np.where(time==time[n])[0]
+            j += 1
+
+    # Trim the data
+    LF_trimmed = []
+    NMR_trimmed =  []
+    for i in range(len(idx_points[0,:])):
+        min_idx = int(idx_points[0,i])
+        max_idx = int(idx_points[1,i])
+        LF_trimmed = np.append(LF_trimmed, LF_signal[min_idx:max_idx])
+        NMR_trimmed = np.append(NMR_trimmed, NMR_signal[min_idx:max_idx])
+    time_trimmed = time[:int(len(NMR_trimmed))]
+
+    return time_trimmed, NMR_trimmed, LF_trimmed

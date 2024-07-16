@@ -151,12 +151,13 @@ class NMRApp:
     # NMR function
     def nmr_function(self):
 
-        HF_setting = 17
+        HF_setting = 15.75
+        # HF_setting = 17
         nmr_spectrum = np.zeros([3, 1200])
         nmr_spectrum[0,:] = np.linspace(16, 20, num=1200)
 
-        # while HF_setting <= 20:
-        for i in range(10):
+        while HF_setting <= 20:
+        # for i in range(10):
 
             # Update the HF setting display
             self.label1.config(text=f"HF Setting: {HF_setting:.4f}MHz")
@@ -172,13 +173,16 @@ class NMRApp:
             self.root.after(50)
 
             # Generate NMR Spectrum
-            nmr_spectrum = nmr_spectrum_compiler(NMR_spectrum=nmr_spectrum, 
-                                                 NMR_signal=nmr_signal, 
-                                                 LF_signal=lf_signal,
-                                                 HF_setting=HF_actual)
+            nmr_spectrum = nmr_spectrum_compiler(
+                NMR_spectrum=nmr_spectrum,
+                NMR_signal=nmr_signal,
+                LF_signal=lf_signal,
+                HF_setting=HF_actual,
+                time=x
+            )
 
             # Plot NMR Spectrum
-            self.plot_nmr_spectrum(x=np.linspace(16, 20, 1200), y=nmr_spectrum, plot_rgb="#02edaf")
+            self.plot_nmr_spectrum(x=np.linspace(16, 20, 1200), y=nmr_spectrum[1], plot_rgb="#02edaf")
             self.root.after(50)
 
             # Generate Pattern Search
@@ -194,6 +198,7 @@ class NMRApp:
 
             HF_setting += .03125
 
+    # Plot the NMR Signal
     def plot_nmr_signal(self, x, y, plot_rgb):
         # Create a Matplotlib figure
         self.ax_sig.clear()
@@ -207,6 +212,7 @@ class NMRApp:
         self.canvas_sig.draw()
         self.root.update_idletasks()
 
+    # Plot the NMR Spectrum
     def plot_nmr_spectrum(self, x, y, plot_rgb):
         # Create a Matplotlib figure
         self.ax_spec.clear()
@@ -219,6 +225,7 @@ class NMRApp:
         self.canvas_spec.draw()
         self.root.update_idletasks()
 
+    # Plot the Patern Recognition Result
     def plot_pattern_recognition(self, x, y):
         # Create a Matplotlib figure
         material_guess = np.argmax(y) + 1
