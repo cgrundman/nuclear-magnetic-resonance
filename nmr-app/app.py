@@ -156,6 +156,8 @@ class NMRApp:
         nmr_spectrum = np.zeros([3, 1200])
         nmr_spectrum[0,:] = np.linspace(16, 20, num=1200)
 
+        weight = 0
+
         while HF_setting <= 20:
         # for i in range(10):
 
@@ -186,11 +188,16 @@ class NMRApp:
             self.root.after(50)
 
             # Generate Pattern Search
-            x = [1, 2, 3, 4, 5]
-            pattern_rec = np.random.rand(5)
+            material_list = [1, 2, 3, 4, 5]
+            # pattern_rec = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
+            pattern_rec = np.array([1, 1, 1,1, 1])
+            while weight < 1200 and nmr_spectrum[1,weight] > 0:
+                weight += 1
+                
+            pattern_rec = pattern_rec*weight/len(nmr_spectrum[0])
 
             # Plot Pattern Recognition
-            self.plot_pattern_recognition(x=x, y=pattern_rec)
+            self.plot_pattern_recognition(x=material_list, y=pattern_rec)
 
             # Update the Pattern Recognition display
             self.label6.config(text=f"Guess: Material {np.argmax(pattern_rec) + 1}\nConfidence: {pattern_rec[np.argmax(pattern_rec)]*100:.1f}%")
@@ -243,47 +250,3 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = NMRApp(root)
     root.mainloop()
-
-
-
-
-
-# import tkinter as tk
-# from tkinter import ttk
-# import matplotlib.pyplot as plt
-# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-# import numpy as np
-
-# class RandomPlotApp:
-#     def __init__(self, root):
-#         self.root = root
-#         self.root.title("Random Plot App")
-        
-#         # Create a plot figure
-#         self.fig, self.ax = plt.subplots()
-#         self.ax.set_title("Random Numbers Plot")
-#         self.canvas = FigureCanvasTkAgg(self.fig, master=root)
-#         self.canvas_widget = self.canvas.get_tk_widget()
-#         self.canvas_widget.pack()
-
-#         # Create a button
-#         self.plot_button = ttk.Button(root, text="Plot Random Numbers", command=self.plot_multiple_random_numbers)
-#         self.plot_button.pack()
-
-#     def plot_random_numbers(self):
-#         self.ax.clear()
-#         random_numbers = np.random.rand(10)
-#         self.ax.plot(random_numbers)
-#         self.ax.set_title("Random Numbers Plot")
-#         self.canvas.draw()
-#         self.root.update_idletasks()
-
-#     def plot_multiple_random_numbers(self):
-#         for _ in range(5):
-#             self.plot_random_numbers()
-#             self.root.after(500)  # Delay between plots for visibility
-
-# if __name__ == "__main__":
-#     root = tk.Tk()
-#     app = RandomPlotApp(root)
-#     root.mainloop()
