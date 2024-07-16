@@ -8,8 +8,6 @@ import random
 from nmr_signal import nmr_signal_generator
 from nmr_spectrum import nmr_spectrum_compiler
 
-# import sv_ttk
-
 
 # Materials
 material_1 = {
@@ -156,7 +154,7 @@ class NMRApp:
         nmr_spectrum = np.zeros([3, 1200])
         nmr_spectrum[0,:] = np.linspace(16, 20, num=1200)
 
-        weight = 0
+        num_scanned = 0
 
         while HF_setting <= 20:
         # for i in range(10):
@@ -189,18 +187,19 @@ class NMRApp:
 
             # Generate Pattern Search
             material_list = [1, 2, 3, 4, 5]
-            # pattern_rec = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
-            pattern_rec = np.array([1, 1, 1,1, 1])
-            while weight < 1200 and nmr_spectrum[1,weight] > 0:
-                weight += 1
-                
-            pattern_rec = pattern_rec*weight/len(nmr_spectrum[0])
+            random_guess = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
+            pattern_rec = np.array([1, 0, 0, 0, 0])
+            while num_scanned < 1200 and nmr_spectrum[1,num_scanned] > 0:
+                num_scanned += 1
+            scanned_percent = num_scanned/len(nmr_spectrum[0])
+
+            guess = random_guess*(1-scanned_percent) + pattern_rec*scanned_percent
 
             # Plot Pattern Recognition
-            self.plot_pattern_recognition(x=material_list, y=pattern_rec)
+            self.plot_pattern_recognition(x=material_list, y=guess)
 
             # Update the Pattern Recognition display
-            self.label6.config(text=f"Guess: Material {np.argmax(pattern_rec) + 1}\nConfidence: {pattern_rec[np.argmax(pattern_rec)]*100:.1f}%")
+            self.label6.config(text=f"Guess: Material {np.argmax(guess) + 1}\nConfidence: {guess[np.argmax(guess)]*100:.1f}%")
             self.root.after(50)
 
             HF_setting += .03125
