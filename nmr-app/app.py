@@ -58,7 +58,7 @@ class NMRApp:
         self.style = ttk.Style()
         self.style.configure('Red.TButton', 
                         background='#fa1505', # Red
-                        font=('Helvetica', 12),
+                        font=('Helvetica', 20),
                         padding=6)
         self.style.map('Red.TButton',
                        foreground=[('active', '#fa1505')])
@@ -146,10 +146,10 @@ class NMRApp:
         # Material Selection
         self.label7 = tk.Label(self.root, text=f"Material Selection:", font=('Helvetica', 20), bg=bg_color, width=30, height=10)
         self.label7.grid(row=1, column=5, sticky="S")
-        self.options = ["Material 1", "Material 2", "Material 3", "Material 4", "Material 5"]
+        self.options = [1,2,3,4,5]
         self.selected_option = tk.IntVar()
         self.drop_list = ttk.Combobox(self.root, textvariable=self.selected_option, values=self.options, state='readonly', font=("Helvetica",20))
-        self.drop_list.grid(row=2, column=5, sticky="N", ipadx=10)
+        self.drop_list.grid(row=2, column=5, sticky="N", ipady=10)
         self.drop_list.current(0)  # Set the default selected option
 
 
@@ -173,7 +173,7 @@ class NMRApp:
             HF_actual = HF_setting + ((random.random()-.5)/50)
 
             # Generate NMR Signal
-            x, lf_signal, nmr_signal = nmr_signal_generator(material=materials[3], HF_actual=HF_actual)
+            x, lf_signal, nmr_signal = nmr_signal_generator(material=materials[self.selected_option.get()-1], HF_actual=HF_actual)
             
             # Plot NMR Signal
             self.plot_nmr_signal(x=x, y=[lf_signal*2-0.5, nmr_signal], plot_rgb=["#4976fc", "#ff4f4d"])
