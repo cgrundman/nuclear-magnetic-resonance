@@ -51,9 +51,12 @@ pattern_search = load_pattern_search()
 
 class NMRApp:
     def __init__(self, root):
+        bg_color = '#4c4c4c'
+        self.plt_color = '#5a5a5a'
+
         self.root = root
         self.root.title("NMR App")
-        self.root.configure(bg='#4c4c4c')
+        self.root.configure(bg=bg_color)
 
         self.style = ttk.Style()
         self.style.configure('Red.TButton', 
@@ -64,7 +67,6 @@ class NMRApp:
                        foreground=[('active', '#fa1505')])
 
         font_size = 12
-        bg_color = '#4c4c4c'
 
         HF_setting = 16.0000
         LF_setting = 27
@@ -82,11 +84,11 @@ class NMRApp:
         self.frame3.grid(row=1, column=0, columnspan=5)
         # Create NMR Signal Plot
         self.fig_sig = Figure(figsize=(13.5, 2), dpi=100)
-        self.fig_sig.patch.set_facecolor('#4c4c4c')
+        self.fig_sig.patch.set_facecolor(bg_color)
         self.fig_sig.tight_layout()
         self.ax_sig = self.fig_sig.add_subplot(111)
         self.ax_sig.set_ylabel("NMR Signal")
-        self.ax_sig.set_facecolor('#5a5a5a')
+        self.ax_sig.set_facecolor(self.plt_color)
         self.ax_sig.grid(True)
         self.ax_sig.set_xlim([0, 5/28])
         self.ax_sig.set_ylim([0, 4])
@@ -100,11 +102,11 @@ class NMRApp:
         self.frame4.grid(row=2, column=0, columnspan=5)
         # Create NMR Spectrum Plot
         self.fig_spec = Figure(figsize=(13.5, 2), dpi=100)
-        self.fig_spec.patch.set_facecolor('#4c4c4c')
+        self.fig_spec.patch.set_facecolor(bg_color)
         self.fig_spec.tight_layout()
         self.ax_spec = self.fig_spec.add_subplot(111)
         self.ax_spec.set_ylabel("NMR Spectrum")
-        self.ax_spec.set_facecolor('#5a5a5a')
+        self.ax_spec.set_facecolor(self.plt_color)
         self.ax_spec.grid(True)
         self.ax_spec.set_xlim([16, 20])
         self.ax_spec.set_ylim([0, 4])
@@ -119,13 +121,13 @@ class NMRApp:
         x = [1, 2, 3, 4, 5]
         pattern_rec = np.random.rand(5)
         self.fig_pat = Figure(figsize=(7, 2), dpi=100)
-        self.fig_pat.patch.set_facecolor('#4c4c4c')
+        self.fig_pat.patch.set_facecolor(bg_color)
         self.fig_pat.tight_layout()
         self.ax_pat = self.fig_pat.add_subplot(111)
         self.ax_pat.set_xlim([0.4, 5.6])
         self.ax_pat.set_ylim([0, 1])
         self.ax_pat.set_title(f"Guess: ", x=1.3, y=0.5)
-        self.ax_pat.set_facecolor('#7f7f7f')
+        self.ax_pat.set_facecolor(self.plt_color)
         # fig3 = bar(name="Pattern Recognition", x=x, y=pattern_rec)
         self.canvas_pat = FigureCanvasTkAgg(self.fig_pat, master=self.frame5)
         self.canvas_widget_pat = self.canvas_pat.get_tk_widget()
@@ -137,7 +139,7 @@ class NMRApp:
 
         # Buttons for Application
         self.label7 = tk.Label(self.root, font=('Helvetica', font_size), bg=bg_color, width=30, height=10)
-        self.label7.grid(row=3, column=4)
+        self.label7.grid(row=3, column=5)
         self.run_button = ttk.Button(self.label7, text="Run", command=self.nmr_function, style='Red.TButton')
         self.run_button.grid(ipady=10, ipadx=10, pady=20)
         self.close_button = ttk.Button(self.label7, text="Close", command=self.root.destroy, style='Red.TButton')
@@ -196,8 +198,6 @@ class NMRApp:
             material_list = [1, 2, 3, 4, 5]
             random_guess = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
             pattern_rec = predict(model=pattern_search, input=nmr_spectrum[1])
-            print(nmr_spectrum[1])
-            print(pattern_rec)
             while num_scanned < 1200 and nmr_spectrum[1,num_scanned] > 0:
                 num_scanned += 1
             scanned_percent = num_scanned/len(nmr_spectrum[0])
@@ -221,7 +221,7 @@ class NMRApp:
         self.ax_sig.set_xlim([x[0], x[-1]])
         self.ax_sig.set_ylim([0, 4])
         self.ax_sig.set_ylabel("NMR Signal")
-        self.ax_sig.set_facecolor('#5a5a5a')
+        self.ax_sig.set_facecolor(self.plt_color)
         self.ax_sig.grid(True)
         self.canvas_sig.draw()
         self.root.update_idletasks()
@@ -234,7 +234,7 @@ class NMRApp:
         self.ax_spec.set_xlim([x[0], x[-1]])
         self.ax_spec.set_ylim([0, 4])
         self.ax_spec.set_ylabel("NMR Signal")
-        self.ax_spec.set_facecolor('#5a5a5a')
+        self.ax_spec.set_facecolor(self.plt_color)
         self.ax_spec.grid(True)
         self.canvas_spec.draw()
         self.root.update_idletasks()
@@ -248,7 +248,7 @@ class NMRApp:
         self.ax_pat.set_xlim([0.4, 5.6])
         self.ax_pat.set_ylim([0, 1])
         self.ax_pat.set_title(f"Guess: Material {material_guess}", x=1.3, y=0.5)
-        self.ax_pat.set_facecolor('#7f7f7f')
+        self.ax_pat.set_facecolor(self.plt_color)
         self.canvas_pat.draw()
         self.root.update_idletasks()
 
