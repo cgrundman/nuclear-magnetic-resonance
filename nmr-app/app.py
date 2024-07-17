@@ -144,10 +144,13 @@ class NMRApp:
         self.close_button.grid(ipady=10, ipadx=10, pady=20)
 
         # Material Selection
-        self.label8 = tk.Label(self.root, text="Material Selection", wraplength=1, font=('Helvetica', font_size), bg=bg_color, highlightbackground="black", highlightthickness=2, width=30, height=40)
-        self.label8.grid(row=0, rowspan=4, column=5)
-
-        # sv_ttk.set_theme("dark")
+        self.label7 = tk.Label(self.root, text=f"Material Selection:", font=('Helvetica', 20), bg=bg_color, width=30, height=10)
+        self.label7.grid(row=1, column=5, sticky="S")
+        self.options = ["Material 1", "Material 2", "Material 3", "Material 4", "Material 5"]
+        self.selected_option = tk.IntVar()
+        self.drop_list = ttk.Combobox(self.root, textvariable=self.selected_option, values=self.options, state='readonly', font=("Helvetica",20))
+        self.drop_list.grid(row=2, column=5, sticky="N", ipadx=10)
+        self.drop_list.current(0)  # Set the default selected option
 
 
     # NMR function
