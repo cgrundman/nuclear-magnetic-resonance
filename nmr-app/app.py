@@ -51,7 +51,7 @@ materials = [
 pattern_search = load_pattern_search()
 
 # Screen Grab
-screen_grab = True
+screen_grab = False
 
 class NMRApp:
     def __init__(self, root):
