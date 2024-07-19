@@ -4,6 +4,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import numpy as np
 import random
+import mss
 
 from nmr_signal import nmr_signal_generator
 from nmr_spectrum import nmr_spectrum_compiler
@@ -48,6 +49,9 @@ materials = [
 
 # Pattern Search
 pattern_search = load_pattern_search()
+
+# Screen Grab
+screen_grab = True
 
 class NMRApp:
     def __init__(self, root):
@@ -210,6 +214,10 @@ class NMRApp:
             self.label6.config(text=f"Guess: Material {np.argmax(guess) + 1}\nConfidence: {guess[np.argmax(guess)]*100:.1f}%")
             self.root.after(50)
 
+            self.setting = int(HF_setting * 1000)
+            self.num = 3
+            self.take_screenshot()
+
             HF_setting += .03125
 
     # Plot the NMR Signal
@@ -251,6 +259,20 @@ class NMRApp:
         self.ax_pat.set_facecolor(self.plt_color)
         self.canvas_pat.draw()
         self.root.update_idletasks()
+
+    def take_screenshot(self):
+        with mss.mss() as sct:
+
+            # The screen part to capture
+            monitor = {"top": 20, "left": 20, "width": 2000, "height": 900}
+            output = f"figures/screenshots/sct_{self.setting}_{self.num}.png".format(**monitor)
+
+            # Grab the data
+            sct_img = sct.grab(monitor)
+
+            # Save to the picture file
+            mss.tools.to_png(sct_img.rgb, sct_img.size, output=output)
+            # print(output)
 
 
 if __name__ == "__main__":
