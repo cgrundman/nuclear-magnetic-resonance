@@ -1,5 +1,7 @@
 # Nuclear Magnetic Resonance
 
+<img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/app_example.gif" />
+
 NMR spectroscopy is a non-destructive method for material identification. The current state-of-the-art machines are expensive and in high demand. Therefor NMR Data is difficult to come by.
 
 The information in this repository is meant to serve as a supplement to Continuous Wave Nuclear Magnetic Resonanse (CW-NMR). This repo contains code for generating an NMR signal, processing the raw signal into tradition NMR data, and implementing pattern recognition on the generated data.
@@ -59,3 +61,9 @@ In the end, the simple NN was able to classify with near 100% accuracy. The RNN 
 The following is the performance of the model. As seen in the example the model has near 100% accuracy.
 
 <img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/model_demo.png" />
+
+## Application
+
+The application, written with tkinter, combines all of the functions above to show how a CW-NMR device works.
+
+<img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/material_4_full_run.gif" />
