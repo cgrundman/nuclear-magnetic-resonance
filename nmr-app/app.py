@@ -219,8 +219,13 @@ class NMRApp:
             #     self.take_screenshot()
 
             # Update the Pattern Recognition display
-            self.label6.config(text=f"Guess: Material {np.argmax(guess) + 1}\nConfidence: {guess[np.argmax(guess)]*100:.1f}%")
-            self.root.after(50)
+            confidence = guess[np.argmax(guess)]
+            if confidence > .7:
+                self.label6.config(text=f"         Guess: Material {np.argmax(guess) + 1}       \n       Confidence: {confidence*100:.1f}%       ")
+                self.root.after(50)
+            else:
+                self.label6.config(text=f"Guess: Calculating...\nConfidence: Calculating...")
+                self.root.after(50)
             if screen_grab:
                 self.setting = int(HF_setting * 1000)
                 self.num = 3
