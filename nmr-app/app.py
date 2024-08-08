@@ -183,7 +183,7 @@ class NMRApp:
             
             # Plot NMR Signal
             self.plot_nmr_signal(x=x, y=[lf_signal*2-0.5, nmr_signal], plot_rgb=["#4976fc", "#ff4f4d"])
-            self.root.after(50)
+            self.root.after(1)
 
             # Generate NMR Spectrum
             nmr_spectrum = nmr_spectrum_compiler(
@@ -196,7 +196,7 @@ class NMRApp:
 
             # Plot NMR Spectrum
             self.plot_nmr_spectrum(x=np.linspace(16, 20, 1200), y=nmr_spectrum[1], plot_rgb="#02edaf")
-            self.root.after(50)
+            self.root.after(1)
             # if screen_grab:
             #     self.setting = int(HF_setting * 1000)
             #     self.num = 1
@@ -219,10 +219,10 @@ class NMRApp:
                 # Plot Pattern Recognition
                 self.plot_pattern_recognition(x=material_list, y=guess)
                 self.label6.config(text=f"         Guess: Material {np.argmax(guess) + 1}       \n       Confidence: {confidence*100:.1f}%       ")
-                self.root.after(50)
+                self.root.after(1)
             else:
                 self.label6.config(text=f"Guess: Calculating...\nConfidence: Calculating...")
-                self.root.after(50)
+                self.root.after(1)
             if screen_grab:
                 self.setting = int(HF_setting * 1000)
                 self.num = 3
