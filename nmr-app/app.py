@@ -162,15 +162,15 @@ class NMRApp:
     # NMR function
     def nmr_function(self):
 
-        # HF_setting = 15.75
-        HF_setting = 17.3
+        HF_setting = 15.75
+        # HF_setting = 17.7
         nmr_spectrum = np.zeros([3, 1200])
         nmr_spectrum[0,:] = np.linspace(16, 20, num=1200)
 
         num_scanned = 0
 
-        # while HF_setting <= 20:
-        for i in range(10):
+        while HF_setting <= 20:
+        # for i in range(10):
 
             # Update the HF setting display
             self.label1.config(text=f"HF Setting: {HF_setting:.4f}MHz")
