@@ -6,27 +6,37 @@ os.environ['TF_KERAS'] = '1'
 
 import tensorflow as tf
 import keras
+import sklearn
+import pickle
 
 def load_pattern_search():
 
-    model_weights_dir = 'models\model_nn_weights.h5'
+    # model_weights_dir = 'models\model_nn_weights.h5'
 
-    # Create the model
-    model_nn = keras.models.Sequential([
-        keras.layers.InputLayer((1200,)),
-        keras.layers.Dense(8, activation="relu"),
-        keras.layers.Dense(8, activation="relu"),
-        keras.layers.Dense(5, activation="softmax"),
-    ])
+    # # Create the model
+    # model_nn = keras.models.Sequential([
+    #     keras.layers.InputLayer((1200,)),
+    #     keras.layers.Dense(8, activation="relu"),
+    #     keras.layers.Dense(8, activation="relu"),
+    #     keras.layers.Dense(5, activation="softmax"),
+    # ])
 
-    # 2. Compile the model
-    model_nn.compile(loss=keras.losses.SparseCategoricalCrossentropy(),
-                    optimizer=keras.optimizers.Adam(),
-                    metrics=["accuracy"])
+    # # 2. Compile the model
+    # model_nn.compile(loss=keras.losses.SparseCategoricalCrossentropy(),
+    #                 optimizer=keras.optimizers.Adam(),
+    #                 metrics=["accuracy"])
 
-    model_nn.load_weights(model_weights_dir)
+    # model_nn.load_weights(model_weights_dir)
 
-    return model_nn
+    model_dir = 'models\model_lsvc.pkl'
+
+    # Load LinearSVC
+    with open(model_dir, 'rb') as f:
+        model_lsvc = pickle.load(f)
+
+    # clf2.predict(X[0:1])
+
+    return model_lsvc
 
 def predict(model, input):
 
@@ -34,5 +44,6 @@ def predict(model, input):
 
     pred = model.predict(input)
     pred = pred[0]
+    print(pred)
 
     return pred
