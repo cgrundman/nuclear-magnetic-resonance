@@ -206,21 +206,18 @@ class NMRApp:
             material_list = [1, 2, 3, 4, 5]
             random_guess = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
             pattern_rec = predict(model=pattern_search, input=nmr_spectrum[1])
+            # Create one-hot encoding of guess
+            pattern_rec_one_hot = np.eye(5)[np.array([[pattern_rec]]).reshape(-1)][0]
             while num_scanned < 1200 and nmr_spectrum[1,num_scanned] > 0:
                 num_scanned += 1
             scanned_percent = num_scanned/len(nmr_spectrum[0])
-            guess = random_guess*(1-scanned_percent) + pattern_rec*scanned_percent
-
-            # Plot Pattern Recognition
-            self.plot_pattern_recognition(x=material_list, y=guess)
-            # if screen_grab:
-            #     self.setting = int(HF_setting * 1000)
-            #     self.num = 2
-            #     self.take_screenshot()
+            guess = random_guess*(1-scanned_percent) + pattern_rec_one_hot*scanned_percent
 
             # Update the Pattern Recognition display
             confidence = guess[np.argmax(guess)]
-            if confidence > .7:
+            if confidence > .8:
+                # Plot Pattern Recognition
+                self.plot_pattern_recognition(x=material_list, y=guess)
                 self.label6.config(text=f"         Guess: Material {np.argmax(guess) + 1}       \n       Confidence: {confidence*100:.1f}%       ")
                 self.root.after(50)
             else:
