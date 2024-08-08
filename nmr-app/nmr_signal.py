@@ -33,9 +33,9 @@ def nmr_signal_generator(material, HF_actual):
                 resonance_high = resonance + .05
                 resonance_low = resonance - .05
                 if resonance_high - .02 < lf_signal[n] + HF_actual < resonance_high + .02:
-                    nmr_signal[n] = random.random()/10 + 2 + 45*abs((resonance_high-nmr_signal)-(lf_signal[n]))
+                    nmr_signal[n] = random.random()/10 + 2 + 45*abs((resonance_high-HF_actual)-(lf_signal[n]))
                 elif resonance_low - .02 < lf_signal[n] + HF_actual < resonance_low + .02:
-                    nmr_signal[n] = random.random()/10 + 2 + 45*abs((resonance_low-nmr_signal)-(lf_signal[n]))
+                    nmr_signal[n] = random.random()/10 + 2 + 45*abs((resonance_low-HF_actual)-(lf_signal[n]))
             # Triple Peak
             elif peak == 3:
                 resonance_high = resonance + .05
