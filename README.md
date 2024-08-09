@@ -47,27 +47,23 @@ With the ability to create a full spectrum, the next task will be to reduce the 
 
 ### 3. Pattern Recognition
 
-The next task is to recognize the patterns present in the data. At a quick glance, one can see that the materials are very different. The challenge is developing a mathematical model that estimates the 1200 datapoints into a single material. 
+Pattern recognition means developing a mathematical model that estimates the 1200 datapoints into a single material. This mathematical model is developed using machine learning. THe process of selecting an algorithm or architecture means looking at the data. This is seq2seq (sequence to sequence) problem that is further classified as a many-to-one. This means that many data points (an NMR spectrum) are translated into one data point (material classification.
 
-This mathematical model is developed using machine learning. While this is a very hot topic right now, the mathematics behind it have been around for many years. To avoid making this too "mystical" for the average viewer, pattern recognition is used to take the stigma away from what we are doing. So don't worry, this isn't another ChatGPT API.
+The common approach to any ML problem is to pick an ML baseline from scikit-learn and then try to beat that baseline with a deep learning architecture. Scikit-learn provides a [great tool](https://scikit-learn.org/1.3/tutorial/machine_learning_map/index.html) for selecting an ML algorithm seen below:
 
-As disclosure, the model will be devoloped in Google Colab, a jupyter notebook environment that is easily accessible (at the moment at least). This allows for a more simple setup than a local installation of machine learning libraries. TensorFlow will be used for the model creation. For the technical machine learning algorithms and documentation, please refer to the Colab page, as it contains notebook documentaiton. 
+<img src="https://scikit-learn.org/1.3/_static/ml_map.png" width=400 />
 
-Another important note is that this method is used, because geound truth data in the real world os note available.
+For this problem, a Linear Support Vector Classification (SVC) function was implemented. It had a 100% classification rate for the 2000 test samples. So it is pretty unneccesary to create a Neural Network for the data as it exists now (remember that this is idealized data, and there are other missing phenomenon). 
 
-Three model architectures were selected for this task: a [neural network](https://www.ibm.com/topics/neural-networks) (think of this as very basic), a [recurrent neural network (RNN)](https://www.ibm.com/topics/recurrent-neural-networks), and a [Long-Short Term Memory (LSTM)](https://medium.com/@ottaviocalzone/an-intuitive-explanation-of-lstm-a035eb6ab42c) Model. These all have success in tasks involving sequetial data.
+A [dense neural network](https://www.ibm.com/topics/neural-networks) is the obvious first choice for a deep leanring model. For sequential data classification [Recurrent Neural Networks (RNNs)](https://www.ibm.com/topics/recurrent-neural-networks), and [Long-Short Term Memory (LSTMs)](https://medium.com/@ottaviocalzone/an-intuitive-explanation-of-lstm-a035eb6ab42c) are appropriate choices, however they are very large and not needed in this application.
 
-In the end, the simple NN was able to classify with near 100% accuracy. The RNN was unable to get accuracy better than random guesses. It is theorized that the architecture was too complicated for this application. The LSTM was not tested as the NN had the desired results and is much smaller than the other two models. The model trainings can be seen compared below:
+The neural network proived 100% classification as well. While it is ~10x slower than the Linear SVC, it provides regression data for all 5 materials. The Linear SVC returns a single number. The NN returns 5 numbers, confidences in each material positionally encoded to match the material. Below is an example of material classification:
 
-<img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/comp_NN_RNN .png" />
-
-The following is the performance of the model. As seen in the example the model has near 100% accuracy.
-
-<img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/model_demo.png" />
+<img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/model_demo.png" width=400 />
 
 ### Application
 
-The application, written with tkinter, combines all of the functions above to show how a CW-NMR device works.
+The application, written with python/tkinter, combines all of the functions above to show how a CW-NMR device works.
 
 <img src="https://github.com/cgrundman/NMR-Signal/blob/master/figures/material_4_full_run.gif" />
 
