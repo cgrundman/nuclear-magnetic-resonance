@@ -81,7 +81,7 @@ def trim_signal(time, NMR_signal, LF_signal):
 def save_signal(NMR, LF, set_point, name, id):
 
     # Create save folder
-    newpath = f"data/unprocessed_nmr_data/{id}_{name}"
+    newpath = f"../data/unprocessed_nmr_data/{id}_{name}"
     if not os.path.exists(newpath):
         os.makedirs(newpath)
 
@@ -90,7 +90,7 @@ def save_signal(NMR, LF, set_point, name, id):
     data = np.zeros([2, len(LF)])
     data[0,:] = LF
     data[1,:] = NMR
-    np.savetxt(f"data/unprocessed_nmr_data/{id}_{name}/{set_point}.txt", data)
+    np.savetxt(f"../data/unprocessed_nmr_data/{id}_{name}/{set_point}.txt", data)
 
 
 def sweep(material, id):

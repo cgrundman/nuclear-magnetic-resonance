@@ -164,12 +164,12 @@ def find_closest(array, baseline):
 def save_spectrum(spectrum, name):
 
     # Create save folder
-    newpath = f"data/processed_nmr_data/"
+    newpath = f"../data/processed_nmr_data/"
     if not os.path.exists(newpath):
         os.makedirs(newpath)
 
     # Save signals to single .txt
-    np.savetxt(f"data/processed_nmr_data/{name}.txt", spectrum)
+    np.savetxt(f"../data/processed_nmr_data/{name}.txt", spectrum)
 
 
 def plot_merge_iteration(NMR_signal, NMR_slices, NMR_merged, LF_signal, LF_slices, LF_merged):
